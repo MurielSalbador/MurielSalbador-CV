@@ -1,4 +1,4 @@
-# 💼 Portafolio de Muriel Salbador
+# 💼 Portafolio de Muriel Elen Salbador
 
 Bienvenido a mi portafolio personal como desarrolladora. Este proyecto tiene como objetivo mostrar mis habilidades, proyectos destacados, certificaciones, y comentarios de quienes colaboraron o trabajaron conmigo. Está desarrollado utilizando tecnologías modernas y conectividad a Supabase como backend.
 
@@ -216,7 +216,7 @@ export const supabase = createClient(supabaseUrl, supabaseKey)
 ## ✨ Autor
 
 **Muriel Elen Salbador**  
-Técnica en programación | Frontend Developer  
+Técnica en programación  
 📍 Argentina  
-📧 [muriel.salbador.dev@gmail.com](mailto:cvemurielsalbador@gmail.com)  
+📧 [cvemurielsalbador@gmail.com](mailto:cvemurielsalbador@gmail.com)  
 🔗 [LinkedIn](https://www.linkedin.com/in/murielsalbador) | [GitHub](https://github.com/MurielSalbador)
