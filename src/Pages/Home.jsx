@@ -78,7 +78,7 @@ const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
 const WORDS = ["Apasionada por la tecnología"];
-const TECH_STACK = ["React","Vite", "Javascript", "C", "HTML", "CSS", "GitHub", "Power BI", "Figma", "Canva", "MongoDB", "Express.js", "SQL", "Node.js", "MySQL", "Supabase" ];
+const TECH_STACK = ["React","Vite", "Javascript", "Python", "C", "HTML", "CSS", "GitHub", "Power BI", "Figma", "Canva", "MongoDB", "Express.js", "SQL", "Node.js", "MySQL", "Supabase" ];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/MurielSalbador" },
   { icon: Linkedin, link: "https://www.linkedin.com/in/muriel-salbador/" },
