@@ -15,7 +15,7 @@ import TechStackIcon from "../components/TechStackIcon";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Certificate from "../components/Certificate";
-import { Code, Award, Boxes } from "lucide-react";
+import { Code, Award, Boxes, Briefcase, Cpu, Globe, GraduationCap } from "lucide-react";
 
 const ToggleButton = ({ onClick, isShowingMore }) => (
   <button
@@ -111,24 +111,10 @@ function a11yProps(index) {
 // techStacks tetap sama
 const experienceItems = [
   {
-    title: "Escuela de Enfermería María Elena Araya de Colombres",
-    tasks: [
-      "Organización de documentación física y digital.",
-      "Atención al público y soporte administrativo.",
-      "Planificación de eventos y elaboración de informes.",
-      "Fortalecí habilidades de trabajo en equipo y comunicación.",
-    ],
-  },
-  {
-    title: "Soporte técnico y atención al cliente",
-    tasks: [
-      "Resolución de problemas técnicos a usuarios finales.",
-      "Mejoras en procesos de soporte y documentación interna.",
-      "Desarrollo de habilidades en empatía y solución ágil de incidencias.",
-    ],
-  },
-  {
     title: "Web Designer",
+    company: "Freelance",
+    period: "2022 - Presente",
+    icon: Globe,
     tasks: [
       "Diseño de sitios web personalizados y responsivos.",
       "Trabajo directo con usuarios para identificar necesidades.",
@@ -137,12 +123,26 @@ const experienceItems = [
   },
   {
     title: "Desarrollador Freelance",
+    company: "Múltiples Proyectos",
+    period: "2023 - Presente",
+    icon: Code,
     tasks: [
       "Creación de sitios web para emprendedores y pymes.",
       "SEO básico, configuración de dominios y hosting.",
       "Gestión completa del ciclo de vida de cada proyecto.",
     ],
   },
+  {
+    title: "Escuela de Enfermería M. E. Araya de Colombres",
+    company: "Soporte Administrativo",
+    period: "2023",
+    icon: Briefcase,
+    tasks: [
+      "Organización de documentación física y digital.",
+      "Atención al público y soporte administrativo.",
+      "Planificación de eventos y elaboración de informes.",
+    ],
+  }
 ];
 
 const skillItems = [
@@ -265,7 +265,7 @@ export default function FullWidthTabs() {
   return (
     <div
       className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden"
-      id="Portofolio"
+      id="Portafolio"
     >
       {/* Header section - unchanged */}
       <div
@@ -477,61 +477,95 @@ export default function FullWidthTabs() {
           </TabPanel>
 
           <TabPanel value={value} index={2} dir={theme.direction}>
-            <div className="max-w-5xl mx-auto px-4 py-6 text-white">
-              <h3
-                className="text-2xl font-semibold mb-6"
-                data-aos="fade-down"
-                data-aos-duration="800"
-              >
-                Experiencia
-              </h3>
-              <ol className="list-decimal list-inside space-y-6 mb-10">
-                {experienceItems.map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="mb-4"
-                    data-aos="fade-up"
-                    data-aos-duration={900 + idx * 100}
-                  >
-                    <h4 className="text-xl font-medium mb-2">{item.title}</h4>
-                    <ul className="list-disc list-inside text-gray-300 space-y-1">
-                      {item.tasks.map((task, tIdx) => (
-                        <li key={tIdx}>{task}</li>
-                      ))}
-                    </ul>
-                  </li>
-                ))}
-              </ol>
+            <div className="max-w-6xl mx-auto px-4 py-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {/* Timeline Experience */}
+                <div className="space-y-10">
+                  <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3" data-aos="fade-right">
+                    <Briefcase className="w-6 h-6 text-[#6366f1]" />
+                    Experiencia Profesional
+                  </h3>
+                  
+                  <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                    {experienceItems.map((item, idx) => (
+                      <div 
+                        key={idx} 
+                        className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active"
+                        data-aos={idx % 2 === 0 ? "fade-right" : "fade-left"}
+                      >
+                        {/* Dot */}
+                        <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white/20 bg-[#030014] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+                          <item.icon className="w-5 h-5 text-[#a855f7]" />
+                        </div>
+                        
+                        {/* Card */}
+                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white/5 p-5 rounded-2xl border border-white/10 backdrop-blur-sm hover:border-white/20 transition-all duration-300">
+                          <div className="flex items-center justify-between mb-2">
+                             <div className="font-bold text-white text-lg">{item.title}</div>
+                             <time className="text-xs font-medium text-slate-400 bg-white/5 py-1 px-2 rounded-full border border-white/10">{item.period}</time>
+                          </div>
+                          <div className="text-[#a855f7] text-sm font-medium mb-3">{item.company}</div>
+                          <ul className="text-slate-400 text-sm space-y-2 list-disc list-inside marker:text-[#6366f1]">
+                            {item.tasks.map((task, tIdx) => (
+                              <li key={tIdx} className="hover:text-slate-300 transition-colors uppercase tracking-tight text-[11px]">{task}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-              <section>
-                <h3
-                  className="text-2xl font-semibold mb-6"
-                  data-aos="fade-down"
-                  data-aos-duration="900"
-                >
-                  Mis habilidades
-                </h3>
-                <ul className="space-y-4">
-                  {skillItems.map(({ name, percent }, idx) => (
-                    <li
-                      key={idx}
-                      className="w-full"
-                      data-aos="fade-up"
-                      data-aos-duration={900 + idx * 100}
-                    >
-                      <div className="flex justify-between mb-1 font-medium">
-                        {name} <span>{percent}%</span>
-                      </div>
-                      <div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-purple-600 rounded-full transition-all duration-700"
-                          style={{ width: `${percent}%` }}
-                        />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </section>
+                {/* Skills & Education */}
+                <div className="space-y-12">
+                  <section>
+                    <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3" data-aos="fade-left">
+                      <Boxes className="w-6 h-6 text-[#a855f7]" />
+                      Habilidades Técnicas
+                    </h3>
+                    <div className="grid grid-cols-1 gap-4" data-aos="zoom-in-up">
+                      {skillItems.map(({ name, percent }, idx) => (
+                        <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/10 hover:border-white/20 transition-all">
+                          <div className="flex justify-between mb-2 text-sm font-medium">
+                            <span className="text-slate-300">{name}</span>
+                            <span className="text-[#a855f7] font-bold">{percent}%</span>
+                          </div>
+                          <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full transition-all duration-1000"
+                              style={{ width: `${percent}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+
+                  <section>
+                    <h3 className="text-2xl font-bold text-white mb-8 flex items-center gap-3" data-aos="fade-left">
+                      <GraduationCap className="w-6 h-6 text-[#6366f1]" />
+                      Educación y Trayectoria
+                    </h3>
+                    <div className="space-y-4">
+                      {educationCertificates.map((edu, idx) => (
+                        <div 
+                          key={idx} 
+                          className="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/10 hover:border-white/20 transition-all group"
+                          data-aos="fade-up"
+                        >
+                          <div className="p-2 bg-[#6366f1]/10 rounded-lg group-hover:bg-[#6366f1]/20 transition-colors">
+                            <Award className="w-6 h-6 text-[#6366f1]" />
+                          </div>
+                          <div>
+                            <h4 className="text-white font-semibold text-sm">{edu.title}</h4>
+                            <p className="text-slate-400 text-xs mt-1">{edu.date}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                </div>
+              </div>
             </div>
           </TabPanel>
         </SwipeableViews>

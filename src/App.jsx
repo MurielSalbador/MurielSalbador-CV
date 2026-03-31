@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./index.css";
 import Home from "./Pages/Home";
 import About from "./Pages/About";
@@ -16,6 +16,12 @@ import NotFoundPage from "./Pages/404";
 
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
+  useEffect(() => {
+    if (!showWelcome) {
+      window.scrollTo(0, 0);
+    }
+  }, [showWelcome]);
+
   return (
     <>
       <AnimatePresence mode="wait">
