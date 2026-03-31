@@ -158,25 +158,25 @@ const skillItems = [
 const educationCertificates = [
   {
     id: "edu-1",
-    Img: "/img/utn.png", // o un ícono genérico
+    Img: "", 
     title: "Tecnicatura Universitaria en Programación – UTN",
     date: "(2024 - 2025) — Promedio 8.0",
   },
   {
     id: "edu-2",
-    Img: "/img/teclabt.png",
+    Img: "",
     title: "Tecnicatura Superior en Programación – Teclabt",
     date: "(2023)",
   },
   {
     id: "edu-3",
-    Img: "/img/verbo.png",
+    Img: "",
     title: "Curso de Desarrollo Web – Colegio Verbo Encarnado",
     date: "(2022)",
   },
   {
     id: "edu-4",
-    Img: "/img/biorobotica.png",
+    Img: "http://127.0.0.1:54321/storage/v1/object/public/project-images/bio-robotica.png",
     title: "Diploma - Webinar de Bio-Robótica",
     date: "(2024)",
   },
@@ -215,7 +215,11 @@ export default function FullWidthTabs() {
 
       // Supabase mengembalikan data dalam properti 'data'
       const projectData = projectsResponse.data || [];
-      const certificateData = certificatesResponse.data || [];
+      const certificateData = (certificatesResponse.data || []).sort((a, b) => {
+        const aHasImg = a.img && a.img.trim() !== "";
+        const bHasImg = b.img && b.img.trim() !== "";
+        return (bHasImg ? 1 : 0) - (aHasImg ? 1 : 0);
+      });
 
       setProjects(projectData);
       console.log("Proyectos desde Supabase:", projectData);

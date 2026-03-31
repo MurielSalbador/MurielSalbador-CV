@@ -11,100 +11,102 @@ const Certificate = ({ ImgSertif, title, date }) => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      {/* Contenedor de imagen con hover */}
-      <Box
-        sx={{
-          position: "relative",
-          overflow: "hidden",
-          borderRadius: 2,
-          boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-          "&:hover": {
-            transform: "translateY(-5px)",
-            boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
-            "& .overlay": { opacity: 1 },
-            "& .hover-content": {
-              transform: "translate(-50%, -50%)",
-              opacity: 1,
-            },
-            "& .certificate-image": {
-              filter: "contrast(1.05) brightness(1) saturate(1.1)",
-            },
-          },
-        }}
-      >
-        {/* Imagen con filtro inicial */}
+      {/* Contenedor de imagen con hover - Solo se muestra si hay imagen */}
+      {ImgSertif && ImgSertif.trim() !== "" && (
         <Box
           sx={{
             position: "relative",
-            "&::before": {
-              content: '""',
+            overflow: "hidden",
+            borderRadius: 2,
+            boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            "&:hover": {
+              transform: "translateY(-5px)",
+              boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
+              "& .overlay": { opacity: 1 },
+              "& .hover-content": {
+                transform: "translate(-50%, -50%)",
+                opacity: 1,
+              },
+              "& .certificate-image": {
+                filter: "contrast(1.05) brightness(1) saturate(1.1)",
+              },
+            },
+          }}
+        >
+          {/* Imagen con filtro inicial */}
+          <Box
+            sx={{
+              position: "relative",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+                zIndex: 1,
+              },
+            }}
+          >
+            <img
+              className="certificate-image"
+              src={ImgSertif}
+              alt={title || "Certificate"}
+              style={{
+                width: "100%",
+                height: "auto",
+                display: "block",
+                objectFit: "cover",
+                filter: "contrast(1.10) brightness(0.9) saturate(1.1)",
+                transition: "filter 0.3s ease",
+                cursor: "pointer",
+              }}
+              onClick={handleOpen}
+            />
+          </Box>
+
+          {/* Overlay hover */}
+          <Box
+            className="overlay"
+            sx={{
               position: "absolute",
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
-              zIndex: 1,
-            },
-          }}
-        >
-          <img
-            className="certificate-image"
-            src={ImgSertif}
-            alt={title || "Certificate"}
-            style={{
-              width: "100%",
-              height: "auto",
-              display: "block",
-              objectFit: "cover",
-              filter: "contrast(1.10) brightness(0.9) saturate(1.1)",
-              transition: "filter 0.3s ease",
+              opacity: 0,
+              transition: "all 0.3s ease",
               cursor: "pointer",
+              zIndex: 2,
             }}
             onClick={handleOpen}
-          />
-        </Box>
-
-        {/* Overlay hover */}
-        <Box
-          className="overlay"
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            opacity: 0,
-            transition: "all 0.3s ease",
-            cursor: "pointer",
-            zIndex: 2,
-          }}
-          onClick={handleOpen}
-        >
-          <Box
-            className="hover-content"
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -60%)",
-              opacity: 0,
-              transition: "all 0.4s ease",
-              textAlign: "center",
-              width: "100%",
-              color: "white",
-            }}
           >
-            <FullscreenIcon
-              sx={{ fontSize: 40, mb: 1, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}
-            />
-            <Typography variant="h6" sx={{ fontWeight: 600, textShadow: "0 2px 4px rgba(0,0,0,0.3)" }}>
-              Ver Certificado Completo
-            </Typography>
+            <Box
+              className="hover-content"
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -60%)",
+                opacity: 0,
+                transition: "all 0.4s ease",
+                textAlign: "center",
+                width: "100%",
+                color: "white",
+              }}
+            >
+              <FullscreenIcon
+                sx={{ fontSize: 40, mb: 1, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}
+              />
+              <Typography variant="h6" sx={{ fontWeight: 600, textShadow: "0 2px 4px rgba(0,0,0,0.3)" }}>
+                Ver Certificado Completo
+              </Typography>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      )}
 
       {/* Mostrar título y fecha debajo de la imagen */}
       {(title || date) && (
@@ -122,70 +124,72 @@ const Certificate = ({ ImgSertif, title, date }) => {
         </Box>
       )}
 
-      {/* Modal con la imagen ampliada */}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 300,
-          sx: { backgroundColor: "rgba(0, 0, 0, 0.9)", backdropFilter: "blur(5px)" },
-        }}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          margin: 0,
-          padding: 0,
-          "& .MuiBackdrop-root": {
-            backgroundColor: "rgba(0, 0, 0, 0.9)",
-          },
-        }}
-      >
-        <Box
+      {/* Modal con la imagen ampliada - Solo si hay imagen */}
+      {ImgSertif && ImgSertif.trim() !== "" && (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 300,
+            sx: { backgroundColor: "rgba(0, 0, 0, 0.9)", backdropFilter: "blur(5px)" },
+          }}
           sx={{
-            position: "relative",
-            width: "auto",
-            maxWidth: "90vw",
-            maxHeight: "90vh",
-            m: 0,
-            p: 0,
-            outline: "none",
-            "&:focus": { outline: "none" },
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: 0,
+            padding: 0,
+            "& .MuiBackdrop-root": {
+              backgroundColor: "rgba(0, 0, 0, 0.9)",
+            },
           }}
         >
-          <IconButton
-            onClick={handleClose}
+          <Box
             sx={{
-              position: "absolute",
-              right: 16,
-              top: 16,
-              color: "white",
-              bgcolor: "rgba(0,0,0,0.6)",
-              zIndex: 1,
-              padding: 1,
-              "&:hover": { bgcolor: "rgba(0,0,0,0.8)", transform: "scale(1.1)" },
-            }}
-            size="large"
-          >
-            <CloseIcon sx={{ fontSize: 24 }} />
-          </IconButton>
-
-          <img
-            src={ImgSertif}
-            alt={title || "Certificate Full View"}
-            style={{
-              display: "block",
-              maxWidth: "100%",
+              position: "relative",
+              width: "auto",
+              maxWidth: "90vw",
               maxHeight: "90vh",
-              margin: "0 auto",
-              objectFit: "contain",
+              m: 0,
+              p: 0,
+              outline: "none",
+              "&:focus": { outline: "none" },
             }}
-          />
-        </Box>
-      </Modal>
+          >
+            <IconButton
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                right: 16,
+                top: 16,
+                color: "white",
+                bgcolor: "rgba(0,0,0,0.6)",
+                zIndex: 1,
+                padding: 1,
+                "&:hover": { bgcolor: "rgba(0,0,0,0.8)", transform: "scale(1.1)" },
+              }}
+              size="large"
+            >
+              <CloseIcon sx={{ fontSize: 24 }} />
+            </IconButton>
+
+            <img
+              src={ImgSertif}
+              alt={title || "Certificate Full View"}
+              style={{
+                display: "block",
+                maxWidth: "100%",
+                maxHeight: "90vh",
+                margin: "0 auto",
+                objectFit: "contain",
+              }}
+            />
+          </Box>
+        </Modal>
+      )}
     </Box>
   )
 }
