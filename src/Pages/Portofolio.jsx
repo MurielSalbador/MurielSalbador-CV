@@ -176,7 +176,7 @@ const educationCertificates = [
   },
   {
     id: "edu-4",
-    Img: "http://127.0.0.1:54321/storage/v1/object/public/project-images/bio-robotica.png",
+    Img: "https://qnguifvtxzwtsacrjoru.supabase.co/storage/v1/object/public/project-images/bio-robotica.png",
     title: "Diploma - Webinar de Bio-Robótica",
     date: "(2024)",
   },
