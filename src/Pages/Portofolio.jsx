@@ -211,6 +211,22 @@ const PROJECTS = [
     ],
     TechStack: ["React 19", "TypeScript", "Vite", "Node.js", "Express 5", "Prisma", "PostgreSQL", "Electron"],
   },
+  {
+    id: 4,
+    Title: "Zafiro Beauty",
+    Description: "Plataforma web full-stack para gestionar y reservar turnos en un centro de depilación láser y tratamientos estéticos. Permite a los clientes agendar sesiones y realizar señas vía MercadoPago.",
+    Img: "/ZafiroBeauty.png",
+    Link: "https://zafiro-beauty-web.vercel.app/",
+    Github: ["https://github.com/MurielSalbador/ZafiroBeauty"],
+    Features: [
+      "Reserva de turnos online con integración a MercadoPago para el pago de señas.",
+      "Panel de administración para gestionar horarios, disponibilidad y bloqueos de días.",
+      "Notificaciones de confirmación por WhatsApp.",
+      "Múltiples categorías: paquetes láser completos, combos iniciales, zonas individuales y tratamientos faciales.",
+      "Arquitectura monorepo con Turborepo y tipos TypeScript compartidos entre frontend y backend.",
+    ],
+    TechStack: ["React", "Vite", "TypeScript", "TailwindCSS", "NestJS", "tRPC", "PostgreSQL", "Drizzle ORM"],
+  },
 ];
 
 const CERTIFICATES = [
