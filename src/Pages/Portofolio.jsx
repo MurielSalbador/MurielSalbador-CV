@@ -1,6 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
-
-import { supabase } from "../supabase";
+import React, { useEffect, useState } from "react";
 
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
@@ -11,7 +9,6 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import CardProject from "../components/CardProject";
-import TechStackIcon from "../components/TechStackIcon";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Certificate from "../components/Certificate";
@@ -176,87 +173,81 @@ const educationCertificates = [
   },
   {
     id: "edu-4",
-    Img: "https://qnguifvtxzwtsacrjoru.supabase.co/storage/v1/object/public/project-images/bio-robotica.png",
+    Img: "/bio-robotica.png",
     title: "Diploma - Webinar de Bio-Robótica",
     date: "(2024)",
   },
 ];
 
+const PROJECTS = [
+  {
+    id: 2,
+    Title: "RubioHnos",
+    Description: "Tienda online de tres hermanos que venden productos alimenticios saludables para el hogar.",
+    Img: "/RubioHnos - Tienda Natural.png",
+    Link: "https://rubio-hnos.vercel.app/",
+    Github: ["https://github.com/MurielSalbador/RubioHnos.git"],
+    Features: [
+      "Seleccionamos cada producto con amor y compromiso para que vos y tu familia puedan disfrutar de una vida más sana y consciente.",
+      "Desde granolas artesanales, barritas energéticas, té natural, yerbas orgánicas hasta miel pura y mucho más… todo pensado para acompañarte día a día con lo mejor de la naturaleza.",
+    ],
+    TechStack: ["React", "Vite", "Node", "MongoDB", "JavaScript", "CSS", "HTML", "SQLite"],
+  },
+  {
+    id: 3,
+    Title: "Stock AFIP - Depósitos Fiscales",
+    Description: "Sistema full-stack moderno para gestionar el stock en depósitos fiscales con integración a los servicios de AFIP. Está estructurado como una aplicación web empaquetada para escritorio.",
+    Img: "/AFIP.png",
+    Link: "",
+    Github: [],
+    Features: [
+      "Arquitectura de tres capas (Frontend, Aplicación, Datos)",
+      "Ejecución nativa en Windows con Electron",
+      "Integración con servicios SOAP de AFIP",
+      "Visualización de datos con Recharts",
+      "Tareas programadas con Node-cron",
+      "Seguridad con JWT y Bcrypt",
+      "Gestión de migraciones con Prisma",
+    ],
+    TechStack: ["React 19", "TypeScript", "Vite", "Node.js", "Express 5", "Prisma", "PostgreSQL", "Electron"],
+  },
+];
+
+const CERTIFICATES = [
+  { id: 4, img: "/bio-robotica.png",  title: "Diploma - Webinar de Bio-Robótica",                          date: "(2024)" },
+  { id: 5, img: "/CERTIFICADO.png",   title: "Curso de N8N – Creá tu Agente de Inteligencia Artificial",   date: "(2025)" },
+  { id: 1, img: "",                   title: "Tecnicatura Universitaria en Programación – UTN",             date: "(2024 - 2025) — Promedio 8.0" },
+  { id: 2, img: "",                   title: "Tecnicatura Superior en Programación – Teclabt",              date: "(2023)" },
+  { id: 3, img: "",                   title: "Curso de Desarrollo Web – Colegio Verbo Encarnado",           date: "(2022)" },
+];
+
 export default function FullWidthTabs() {
   const theme = useTheme();
   const [value, setValue] = useState(0);
-  const [projects, setProjects] = useState([]);
-  const [certificates, setCertificates] = useState([]);
+  const [projects, setProjects] = useState(PROJECTS);
+  const [certificates, setCertificates] = useState(CERTIFICATES);
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCertificates, setShowAllCertificates] = useState(false);
   const isMobile = window.innerWidth < 768;
   const initialItems = isMobile ? 4 : 6;
 
   useEffect(() => {
-    AOS.init({
-      once: false,
-    });
+    AOS.init({ once: false });
+    localStorage.setItem("projects", JSON.stringify(PROJECTS));
+    localStorage.setItem("certificates", JSON.stringify(CERTIFICATES));
   }, []);
-
-  const fetchData = useCallback(async () => {
-    try {
-      // Mengambil data dari Supabase secara paralel
-      const [projectsResponse, certificatesResponse] = await Promise.all([
-        supabase.from("projects").select("*").order("id", { ascending: true }),
-        supabase
-          .from("certificates")
-          .select("*")
-          .order("id", { ascending: true }),
-      ]);
-
-      // Error handling untuk setiap request
-      if (projectsResponse.error) throw projectsResponse.error;
-      if (certificatesResponse.error) throw certificatesResponse.error;
-
-      // Supabase mengembalikan data dalam properti 'data'
-      const projectData = projectsResponse.data || [];
-      const certificateData = (certificatesResponse.data || []).sort((a, b) => {
-        const aHasImg = a.img && a.img.trim() !== "";
-        const bHasImg = b.img && b.img.trim() !== "";
-        return (bHasImg ? 1 : 0) - (aHasImg ? 1 : 0);
-      });
-
-      setProjects(projectData);
-      console.log("Proyectos desde Supabase:", projectData);
-      setCertificates(certificateData);
-
-      // Store in localStorage (fungsionalitas ini tetap dipertahankan)
-      localStorage.setItem("projects", JSON.stringify(projectData));
-      localStorage.setItem("certificates", JSON.stringify(certificateData));
-    } catch (error) {
-      console.error("Error fetching data from Supabase:", error.message);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Coba ambil dari localStorage dulu untuk laod lebih cepat
-    const cachedProjects = localStorage.getItem("projects");
-    const cachedCertificates = localStorage.getItem("certificates");
-
-    if (cachedProjects && cachedCertificates) {
-      setProjects(JSON.parse(cachedProjects));
-      setCertificates(JSON.parse(cachedCertificates));
-    }
-
-    fetchData(); // Tetap panggil fetchData untuk sinkronisasi data terbaru
-  }, [fetchData]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const toggleShowMore = useCallback((type) => {
+  const toggleShowMore = (type) => {
     if (type === "projects") {
       setShowAllProjects((prev) => !prev);
     } else {
       setShowAllCertificates((prev) => !prev);
     }
-  }, []);
+  };
 
   const displayedProjects = showAllProjects
     ? projects

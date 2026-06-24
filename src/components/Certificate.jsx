@@ -1,10 +1,29 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { Modal, IconButton, Box, Typography, Backdrop } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import FullscreenIcon from "@mui/icons-material/Fullscreen"
 
 const Certificate = ({ ImgSertif, title, date }) => {
   const [open, setOpen] = useState(false)
+  const [rotation, setRotation] = useState({ x: 0, y: 0 })
+  const [glare, setGlare] = useState({ x: 50, y: 50 })
+  const [hovered, setHovered] = useState(false)
+  const cardRef = useRef(null)
+
+  const handleMouseMove = (e) => {
+    const el = cardRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    setRotation({ x: ((y / rect.height) - 0.5) * -15, y: ((x / rect.width) - 0.5) * 15 })
+    setGlare({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 })
+  }
+
+  const handleMouseLeave = () => {
+    setRotation({ x: 0, y: 0 })
+    setHovered(false)
+  }
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -14,24 +33,34 @@ const Certificate = ({ ImgSertif, title, date }) => {
       {/* Contenedor de imagen con hover - Solo se muestra si hay imagen */}
       {ImgSertif && ImgSertif.trim() !== "" && (
         <Box
+          ref={cardRef}
+          onMouseMove={handleMouseMove}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={handleMouseLeave}
           sx={{
             position: "relative",
             overflow: "hidden",
             borderRadius: 2,
             boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-            "&:hover": {
-              transform: "translateY(-5px)",
+            transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) ${hovered ? "translateZ(6px)" : "translateZ(0)"}`,
+            transition: hovered ? "transform 0.08s linear, box-shadow 0.3s ease" : "transform 0.5s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease",
+            "&::after": hovered ? {
+              content: '""',
+              position: "absolute",
+              inset: 0,
+              borderRadius: 2,
+              background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.18) 0%, transparent 60%)`,
+              zIndex: 5,
+              pointerEvents: "none",
+            } : {},
+            "& .overlay": { opacity: 0, transition: "opacity 0.3s" },
+            "& .hover-content": { transform: "translate(-50%, -60%)", opacity: 0, transition: "all 0.4s ease" },
+            ...(hovered && {
               boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
               "& .overlay": { opacity: 1 },
-              "& .hover-content": {
-                transform: "translate(-50%, -50%)",
-                opacity: 1,
-              },
-              "& .certificate-image": {
-                filter: "contrast(1.05) brightness(1) saturate(1.1)",
-              },
-            },
+              "& .hover-content": { transform: "translate(-50%, -50%)", opacity: 1 },
+              "& .certificate-image": { filter: "contrast(1.05) brightness(1) saturate(1.1)" },
+            }),
           }}
         >
           {/* Imagen con filtro inicial */}
