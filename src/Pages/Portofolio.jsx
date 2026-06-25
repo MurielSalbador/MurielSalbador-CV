@@ -227,6 +227,22 @@ const PROJECTS = [
     ],
     TechStack: ["React", "Vite", "TypeScript", "TailwindCSS", "NestJS", "tRPC", "PostgreSQL", "Drizzle ORM"],
   },
+  {
+    id: 5,
+    Title: "Neura Stock",
+    Description: "SaaS multi-sucursal para gestionar inventario en tiempo real desde un único dashboard web, pensado para pequeñas y medianas empresas argentinas.",
+    Img: "/NeuraStock.png",
+    Link: "https://stock-neura.vercel.app/",
+    Github: ["https://github.com/MurielSalbador/Neura-Stock"],
+    Features: [
+      "Dashboard ejecutivo con KPIs en tiempo real, alertas de stock crítico y gráficos de tendencia semanal.",
+      "Gestión de inventario multi-sucursal con soporte de SKU, código de barras y categorías jerárquicas.",
+      "Cuatro tipos de movimientos: entradas, salidas, transferencias entre sucursales y ajustes de inventario.",
+      "Control de acceso por roles: Administrador, Gerente y Vendedor con permisos por sucursal.",
+      "Historial de auditoría filtrable con trazabilidad completa de cada movimiento por usuario y fecha.",
+    ],
+    TechStack: ["Next.js", "React 19", "TypeScript", "TailwindCSS", "PostgreSQL", "Prisma", "Auth.js"],
+  },
 ];
 
 const CERTIFICATES = [
