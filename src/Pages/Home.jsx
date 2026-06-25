@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react"
 import { Github, Linkedin, Mail, ExternalLink, Instagram, Sparkles } from "lucide-react"
-import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
@@ -92,6 +91,7 @@ const Home = () => {
   const [charIndex, setCharIndex] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
+  const [imgLoaded, setImgLoaded] = useState(false)
 
   // Optimize AOS initialization
   useEffect(() => {
@@ -140,23 +140,6 @@ const Home = () => {
     );
     return () => clearTimeout(timeout);
   }, [handleTyping]);
-
-  // Lottie configuration
-  const lottieOptions = {
-    src: "https://lottie.host/58753882-bb6a-49f5-a2c0-950eda1e135a/NLbpVqGegK.lottie",
-    loop: true,
-    autoplay: true,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-      progressiveLoad: true,
-    },
-    style: { width: "100%", height: "100%" },
-    className: `w-full h-full transition-all duration-500 ${
-      isHovering 
-        ? "scale-[180%] sm:scale-[160%] md:scale-[150%] lg:scale-[145%] rotate-2" 
-        : "scale-[175%] sm:scale-[155%] md:scale-[145%] lg:scale-[140%]"
-    }`
-  };
 
   return (
     <div className="min-h-screen bg-[#030014] overflow-hidden px-[5%] sm:px-[5%] lg:px-[10%] " id="Home">
@@ -208,31 +191,94 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right Column - Optimized Lottie Animation */}
-            <div className="w-full py-[10%] sm:py-0 lg:w-1/2 h-auto lg:h-[600px] xl:h-[750px] relative flex items-center justify-center order-2 lg:order-2 mt-8 lg:mt-0"
+            {/* Right Column - Zafiro Beauty Showcase */}
+            <div
+              className="w-full py-[10%] sm:py-0 lg:w-1/2 h-auto lg:h-[600px] xl:h-[750px] relative flex items-center justify-center order-2 lg:order-2 mt-8 lg:mt-0"
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
               data-aos="fade-left"
               data-aos-delay="600">
-              <div className="relative w-full opacity-90">
-                <div className={`absolute inset-0 bg-gradient-to-r from-[#6366f1]/10 to-[#a855f7]/10 rounded-3xl blur-3xl transition-all duration-700 ease-in-out ${
-                  isHovering ? "opacity-50 scale-105" : "opacity-20 scale-100"
-                }`}>
-                </div>
 
-                <div className={`relative lg:left-12 z-10 w-full opacity-90 transform transition-transform duration-500 ${
-                  isHovering ? "scale-105" : "scale-100"
-                }`}>
-                  <DotLottieReact {...lottieOptions} />
-                </div>
+              <div className="relative w-full max-w-[520px]">
 
-                <div className={`absolute inset-0 pointer-events-none transition-all duration-700 ${
-                  isHovering ? "opacity-50" : "opacity-20"
-                }`}>
-                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-indigo-500/10 to-purple-500/10 blur-3xl animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite] transition-all duration-700 ${
-                    isHovering ? "scale-110" : "scale-100"
-                  }`}>
+                {/* Outer glow */}
+                <div className={`absolute -inset-6 rounded-3xl blur-3xl transition-all duration-700 ${
+                  isHovering
+                    ? "opacity-70 scale-105 bg-gradient-to-br from-[#6366f1]/30 to-[#a855f7]/30"
+                    : "opacity-30 scale-100 bg-gradient-to-br from-[#6366f1]/15 to-[#a855f7]/15"
+                }`} />
+
+                {/* Card */}
+                <div className={`relative rounded-2xl overflow-hidden border transition-all duration-500 ${
+                  isHovering ? "border-white/20 scale-[1.02]" : "border-white/10 scale-100"
+                }`}
+                  style={{ boxShadow: isHovering ? '0 0 40px rgba(99,102,241,0.25), 0 0 80px rgba(168,85,247,0.12)' : '0 0 20px rgba(99,102,241,0.1)' }}>
+
+                  {/* Browser chrome */}
+                  <div className="bg-[#080420]/95 backdrop-blur-sm px-4 py-2.5 flex items-center gap-3 border-b border-white/8">
+                    <div className="flex gap-1.5 shrink-0">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/75" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/75" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/75" />
+                    </div>
+                    <div className="flex-1 bg-white/5 rounded-full px-3 py-1 text-[11px] text-gray-400 font-mono truncate border border-white/8">
+                      zafiro-beauty-web.vercel.app
+                    </div>
+                    <a
+                      href="https://zafiro-beauty-web.vercel.app/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 text-gray-500 hover:text-indigo-400 transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
                   </div>
+
+                  {/* Screenshot */}
+                  <div className="relative overflow-hidden bg-[#030014]">
+                    <img
+                      src="/ZafiroBeauty.png"
+                      alt="Zafiro Beauty — plataforma de turnos láser"
+                      onLoad={() => setImgLoaded(true)}
+                      className={`w-full object-cover object-top transition-all duration-700 ${
+                        isHovering ? "scale-[1.04]" : "scale-100"
+                      } ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+                      style={{ maxHeight: '360px' }}
+                    />
+
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030014]/80 pointer-events-none" />
+
+                    {/* Scan line effect */}
+                    <div className="absolute inset-0 pointer-events-none opacity-20"
+                      style={{ background: 'repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(99,102,241,0.04) 3px,rgba(99,102,241,0.04) 4px)' }} />
+                  </div>
+
+                  {/* Footer info */}
+                  <div className="bg-[#080420]/95 backdrop-blur-sm px-4 py-3 flex items-center justify-between border-t border-white/8">
+                    <div>
+                      <p className="text-white font-semibold text-sm leading-tight">Zafiro Beauty</p>
+                      <p className="text-gray-400 text-[11px] mt-0.5">Full-stack · Turnos · MercadoPago</p>
+                    </div>
+                    <a href="#Portafolio"
+                      className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white text-xs font-medium transition-opacity hover:opacity-90 shrink-0">
+                      Ver proyecto
+                    </a>
+                  </div>
+                </div>
+
+                {/* Floating badge: estado */}
+                <div className={`absolute -top-3 -right-2 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-white/10 text-[11px] font-mono transition-all duration-500 ${
+                  isHovering ? "opacity-100 translate-y-0 text-emerald-400 border-emerald-500/30" : "opacity-60 translate-y-0.5 text-emerald-500/70"
+                }`}>
+                  ● En producción
+                </div>
+
+                {/* Floating badge: stack */}
+                <div className={`absolute -bottom-3 -left-2 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-white/10 text-[11px] font-mono text-indigo-400 transition-all duration-500 ${
+                  isHovering ? "opacity-100 translate-y-0" : "opacity-50 translate-y-0.5"
+                }`}>
+                  React · NestJS · PostgreSQL
                 </div>
               </div>
             </div>
