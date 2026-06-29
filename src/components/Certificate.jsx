@@ -1,226 +1,79 @@
-import React, { useState, useRef } from "react"
-import { Modal, IconButton, Box, Typography, Backdrop } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
-import FullscreenIcon from "@mui/icons-material/Fullscreen"
+import React, { useState } from "react";
+import { GraduationCap, X, Maximize2 } from "lucide-react";
 
 const Certificate = ({ ImgSertif, title, date }) => {
-  const [open, setOpen] = useState(false)
-  const [rotation, setRotation] = useState({ x: 0, y: 0 })
-  const [glare, setGlare] = useState({ x: 50, y: 50 })
-  const [hovered, setHovered] = useState(false)
-  const cardRef = useRef(null)
+  const [open, setOpen] = useState(false);
+  const hasImage = ImgSertif && ImgSertif.trim() !== "";
 
-  const handleMouseMove = (e) => {
-    const el = cardRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    setRotation({ x: ((y / rect.height) - 0.5) * -15, y: ((x / rect.width) - 0.5) * 15 })
-    setGlare({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 })
+  if (hasImage) {
+    return (
+      <div className="group relative rounded-xl overflow-hidden border border-white/10 bg-white/[0.03] hover:border-[#6366f1]/30 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(99,102,241,0.12)] hover:-translate-y-0.5">
+        <div
+          className="relative overflow-hidden cursor-pointer"
+          onClick={() => setOpen(true)}
+        >
+          <img
+            src={ImgSertif}
+            alt={title || "Certificado"}
+            className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-1.5 text-white text-xs font-medium bg-black/50 rounded-lg px-3 py-1.5">
+              <Maximize2 className="w-3.5 h-3.5" /> Ver completo
+            </div>
+          </div>
+        </div>
+
+        {(title || date) && (
+          <div className="px-3 py-2.5 text-center border-t border-white/[0.06]">
+            {title && <p className="text-white text-xs font-semibold leading-snug">{title}</p>}
+            {date && <p className="text-[#a78bfa] text-[10px] font-mono mt-0.5">{date}</p>}
+          </div>
+        )}
+
+        {/* Lightbox */}
+        {open && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+            onClick={() => setOpen(false)}
+          >
+            <button
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors z-10"
+              onClick={() => setOpen(false)}
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <img
+              src={ImgSertif}
+              alt={title || "Certificado"}
+              className="max-w-full max-h-[90vh] object-contain rounded-xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
+      </div>
+    );
   }
 
-  const handleMouseLeave = () => {
-    setRotation({ x: 0, y: 0 })
-    setHovered(false)
-  }
-
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-
+  // No image — styled card
   return (
-    <Box sx={{ width: "100%" }}>
-      {/* Contenedor de imagen con hover - Solo se muestra si hay imagen */}
-      {ImgSertif && ImgSertif.trim() !== "" && (
-        <Box
-          ref={cardRef}
-          onMouseMove={handleMouseMove}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={handleMouseLeave}
-          sx={{
-            position: "relative",
-            overflow: "hidden",
-            borderRadius: 2,
-            boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-            transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) ${hovered ? "translateZ(6px)" : "translateZ(0)"}`,
-            transition: hovered ? "transform 0.08s linear, box-shadow 0.3s ease" : "transform 0.5s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease",
-            "&::after": hovered ? {
-              content: '""',
-              position: "absolute",
-              inset: 0,
-              borderRadius: 2,
-              background: `radial-gradient(circle at ${glare.x}% ${glare.y}%, rgba(255,255,255,0.18) 0%, transparent 60%)`,
-              zIndex: 5,
-              pointerEvents: "none",
-            } : {},
-            "& .overlay": { opacity: 0, transition: "opacity 0.3s" },
-            "& .hover-content": { transform: "translate(-50%, -60%)", opacity: 0, transition: "all 0.4s ease" },
-            ...(hovered && {
-              boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
-              "& .overlay": { opacity: 1 },
-              "& .hover-content": { transform: "translate(-50%, -50%)", opacity: 1 },
-              "& .certificate-image": { filter: "contrast(1.05) brightness(1) saturate(1.1)" },
-            }),
-          }}
-        >
-          {/* Imagen con filtro inicial */}
-          <Box
-            sx={{
-              position: "relative",
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-                zIndex: 1,
-              },
-            }}
-          >
-            <img
-              className="certificate-image"
-              src={ImgSertif}
-              alt={title || "Certificate"}
-              style={{
-                width: "100%",
-                height: "auto",
-                display: "block",
-                objectFit: "cover",
-                filter: "contrast(1.10) brightness(0.9) saturate(1.1)",
-                transition: "filter 0.3s ease",
-                cursor: "pointer",
-              }}
-              onClick={handleOpen}
-            />
-          </Box>
+    <div className="relative rounded-xl overflow-hidden border border-white/10 bg-gradient-to-br from-[#6366f1]/[0.07] to-[#a855f7]/[0.07] p-5 flex flex-col items-center text-center gap-3 hover:border-[#6366f1]/30 hover:from-[#6366f1]/[0.12] hover:to-[#a855f7]/[0.12] transition-all duration-300 group min-h-[130px] justify-center">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#6366f1]/5 to-[#a855f7]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-          {/* Overlay hover */}
-          <Box
-            className="overlay"
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              opacity: 0,
-              transition: "all 0.3s ease",
-              cursor: "pointer",
-              zIndex: 2,
-            }}
-            onClick={handleOpen}
-          >
-            <Box
-              className="hover-content"
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -60%)",
-                opacity: 0,
-                transition: "all 0.4s ease",
-                textAlign: "center",
-                width: "100%",
-                color: "white",
-              }}
-            >
-              <FullscreenIcon
-                sx={{ fontSize: 40, mb: 1, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}
-              />
-              <Typography variant="h6" sx={{ fontWeight: 600, textShadow: "0 2px 4px rgba(0,0,0,0.3)" }}>
-                Ver Certificado Completo
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      )}
+      <div className="relative z-10 w-11 h-11 rounded-full bg-gradient-to-br from-[#6366f1]/20 to-[#a855f7]/20 border border-[#6366f1]/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+        <GraduationCap className="w-5 h-5 text-[#a78bfa]" />
+      </div>
 
-      {/* Mostrar título y fecha debajo de la imagen */}
-      {(title || date) && (
-        <Box sx={{ mt: 1, textAlign: "center" }}>
-          {title && (
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-              {title}
-            </Typography>
-          )}
-          {date && (
-            <Typography variant="caption" sx={{ color: "gray" }}>
-              {date}
-            </Typography>
-          )}
-        </Box>
-      )}
+      <div className="relative z-10 space-y-1">
+        {title && (
+          <p className="text-white text-xs font-semibold leading-snug">{title}</p>
+        )}
+        {date && (
+          <p className="text-[#a78bfa] text-[10px] font-mono">{date}</p>
+        )}
+      </div>
+    </div>
+  );
+};
 
-      {/* Modal con la imagen ampliada - Solo si hay imagen */}
-      {ImgSertif && ImgSertif.trim() !== "" && (
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 300,
-            sx: { backgroundColor: "rgba(0, 0, 0, 0.9)", backdropFilter: "blur(5px)" },
-          }}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: 0,
-            padding: 0,
-            "& .MuiBackdrop-root": {
-              backgroundColor: "rgba(0, 0, 0, 0.9)",
-            },
-          }}
-        >
-          <Box
-            sx={{
-              position: "relative",
-              width: "auto",
-              maxWidth: "90vw",
-              maxHeight: "90vh",
-              m: 0,
-              p: 0,
-              outline: "none",
-              "&:focus": { outline: "none" },
-            }}
-          >
-            <IconButton
-              onClick={handleClose}
-              sx={{
-                position: "absolute",
-                right: 16,
-                top: 16,
-                color: "white",
-                bgcolor: "rgba(0,0,0,0.6)",
-                zIndex: 1,
-                padding: 1,
-                "&:hover": { bgcolor: "rgba(0,0,0,0.8)", transform: "scale(1.1)" },
-              }}
-              size="large"
-            >
-              <CloseIcon sx={{ fontSize: 24 }} />
-            </IconButton>
-
-            <img
-              src={ImgSertif}
-              alt={title || "Certificate Full View"}
-              style={{
-                display: "block",
-                maxWidth: "100%",
-                maxHeight: "90vh",
-                margin: "0 auto",
-                objectFit: "contain",
-              }}
-            />
-          </Box>
-        </Modal>
-      )}
-    </Box>
-  )
-}
-
-export default Certificate
+export default Certificate;

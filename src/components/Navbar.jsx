@@ -10,7 +10,6 @@ const Navbar = () => {
         { href: "#Home", label: "Home" },
         { href: "#About", label: "Sobre Mí" },
         { href: "#Portafolio", label: "Portafolio" },
-        { href: "#Contact", label: "Contáctame" },
     ];
 
     useEffect(() => {
@@ -82,9 +81,10 @@ const Navbar = () => {
                         <a
                             href="#Home"
                             onClick={(e) => scrollToSection(e, "#Home")}
-                            className="text-xl font-bold bg-gradient-to-r from-[#a855f7] to-[#6366f1] bg-clip-text text-transparent"
+                            className="font-bold bg-gradient-to-r from-[#a855f7] to-[#6366f1] bg-clip-text text-transparent flex items-center gap-2"
                         >
-                            Muriel Elen Salbador
+                            <span className="text-lg hidden sm:inline">Muriel S.</span>
+                            <span className="text-lg sm:hidden">M·S</span>
                         </a>
                     </div>
         

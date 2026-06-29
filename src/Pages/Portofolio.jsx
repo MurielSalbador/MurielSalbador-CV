@@ -448,6 +448,7 @@ export default function FullWidthTabs() {
                       Description={project.Description}
                       Link={project.Link}
                       id={project.id}
+                      TechStack={project.TechStack}
                     />
                   </div>
                 ))}

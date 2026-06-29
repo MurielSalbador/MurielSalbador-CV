@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react"
-import { Github, Linkedin, Mail, ExternalLink, Instagram, Sparkles } from "lucide-react"
+import { Github, Linkedin, Mail, ExternalLink, Instagram, Sparkles, Zap, Brain, CheckCircle, Bot } from "lucide-react"
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
@@ -84,14 +84,150 @@ const SOCIAL_LINKS = [
   { icon: Instagram, link: "https://www.instagram.com/muriel_salbador?igsh=dHp1a2F6ZGxkbjlt" }
 ];
 
+const PIPELINE_NODES = [
+  { label: "Trigger", icon: Zap, active: "from-yellow-500/20 to-orange-500/20 border-yellow-500/30", textColor: "text-yellow-400" },
+  { label: "IA", icon: Brain, active: "from-[#6366f1]/20 to-[#a855f7]/20 border-[#6366f1]/40", textColor: "text-[#a78bfa]" },
+  { label: "Acción", icon: CheckCircle, active: "from-emerald-500/20 to-green-500/20 border-emerald-500/30", textColor: "text-emerald-400" },
+];
+const BOT_MESSAGES = ["Analizando solicitud...", "Ejecutando agente IA...", "¡Automatización lista!"];
+const TECH_BADGES = ["n8n", "GPT-4", "Webhook", "Python"];
+
+const AIShowcaseWidget = memo(() => {
+  const [step, setStep] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const [chatText, setChatText] = useState("");
+  const [chatCharIdx, setChatCharIdx] = useState(0);
+  const [msgIdx, setMsgIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setStep(p => (p + 1) % 4), 1500);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    const current = BOT_MESSAGES[msgIdx];
+    if (chatCharIdx < current.length) {
+      const t = setTimeout(() => {
+        setChatText(p => p + current[chatCharIdx]);
+        setChatCharIdx(p => p + 1);
+      }, 48);
+      return () => clearTimeout(t);
+    } else {
+      const t = setTimeout(() => {
+        setChatText("");
+        setChatCharIdx(0);
+        setMsgIdx(p => (p + 1) % BOT_MESSAGES.length);
+      }, 1800);
+      return () => clearTimeout(t);
+    }
+  }, [chatCharIdx, msgIdx]);
+
+  return (
+    <div
+      className="relative w-full max-w-[520px]"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      <div className={`absolute -inset-6 rounded-3xl blur-3xl transition-all duration-700 ${isHovering ? "opacity-70 scale-105 bg-gradient-to-br from-[#6366f1]/30 to-[#a855f7]/30" : "opacity-30 scale-100 bg-gradient-to-br from-[#6366f1]/15 to-[#a855f7]/15"}`} />
+
+      <div
+        className={`relative rounded-2xl overflow-hidden border transition-all duration-500 ${isHovering ? "border-white/20 scale-[1.02]" : "border-white/10 scale-100"}`}
+        style={{ boxShadow: isHovering ? "0 0 40px rgba(99,102,241,0.25), 0 0 80px rgba(168,85,247,0.12)" : "0 0 20px rgba(99,102,241,0.1)" }}
+      >
+        {/* Browser chrome */}
+        <div className="bg-[#080420]/95 backdrop-blur-sm px-4 py-2.5 flex items-center gap-3 border-b border-white/[0.08]">
+          <div className="flex gap-1.5 shrink-0">
+            <div className="w-2.5 h-2.5 rounded-full bg-red-500/75" />
+            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/75" />
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500/75" />
+          </div>
+          <div className="flex-1 bg-white/5 rounded-full px-3 py-1 text-[11px] text-gray-400 font-mono truncate border border-white/[0.08]">
+            automation.workflow.ai
+          </div>
+          <ExternalLink className="w-3.5 h-3.5 text-gray-500 shrink-0" />
+        </div>
+
+        {/* Content */}
+        <div className="bg-[#030014]/95 px-5 py-5 space-y-4" style={{ minHeight: "260px" }}>
+          {/* Status row */}
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[10px] text-gray-500 font-mono uppercase tracking-widest">Automation Pipeline</span>
+          </div>
+
+          {/* Pipeline nodes */}
+          <div className="flex items-center justify-between gap-2">
+            {PIPELINE_NODES.map((node, i) => {
+              const isActive = step >= i + 1;
+              return (
+                <React.Fragment key={i}>
+                  <div className={`flex-1 flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border transition-all duration-500 ${isActive ? `bg-gradient-to-br ${node.active}` : "bg-white/[0.03] border-white/10"}`}>
+                    <node.icon className={`w-5 h-5 transition-colors duration-500 ${isActive ? node.textColor : "text-gray-700"}`} />
+                    <span className={`text-[10px] font-medium transition-colors duration-500 ${isActive ? "text-white" : "text-gray-700"}`}>{node.label}</span>
+                  </div>
+                  {i < PIPELINE_NODES.length - 1 && (
+                    <div className={`h-0.5 w-5 rounded-full transition-all duration-500 shrink-0 ${step >= i + 2 ? "bg-gradient-to-r from-[#6366f1] to-[#a855f7]" : "bg-white/10"}`} />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+
+          {/* Bot chat */}
+          <div className="rounded-xl bg-white/[0.04] border border-white/[0.08] p-3 flex items-start gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#6366f1]/30 to-[#a855f7]/30 border border-[#6366f1]/30 flex items-center justify-center shrink-0">
+              <Bot className="w-4 h-4 text-[#a78bfa]" />
+            </div>
+            <div className="flex-1 min-h-[36px]">
+              <span className="text-[10px] text-gray-600 font-mono">Asistente IA</span>
+              <p className="text-sm text-gray-300 font-mono leading-snug mt-0.5">
+                {chatText}
+                <span className="inline-block w-[3px] h-3.5 bg-[#6366f1] ml-0.5 animate-pulse align-middle" />
+              </p>
+            </div>
+          </div>
+
+          {/* Tech badges */}
+          <div className="flex flex-wrap gap-1.5">
+            {TECH_BADGES.map((badge, i) => (
+              <span key={i} className="px-2 py-0.5 text-[10px] rounded-full bg-white/[0.04] border border-white/[0.08] text-gray-400 font-mono">
+                {badge}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="bg-[#080420]/95 backdrop-blur-sm px-4 py-3 flex items-center justify-between border-t border-white/[0.08]">
+          <div>
+            <p className="text-white font-semibold text-sm leading-tight">IA & Automatización</p>
+            <p className="text-gray-400 text-[11px] mt-0.5">n8n · GPT · Bots · Notebooks</p>
+          </div>
+          <a href="#Portafolio" className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white text-xs font-medium transition-opacity hover:opacity-90 shrink-0">
+            Ver proyectos
+          </a>
+        </div>
+      </div>
+
+      {/* Floating badge — estado */}
+      <div className={`absolute -top-3 -right-2 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-white/10 text-[11px] font-mono transition-all duration-500 ${isHovering ? "opacity-100 text-emerald-400 border-emerald-500/30" : "opacity-60 text-emerald-500/70"}`}>
+        ● Activo
+      </div>
+
+      {/* Floating badge — stack */}
+      <div className={`absolute -bottom-3 -left-2 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-white/10 text-[11px] font-mono text-indigo-400 transition-all duration-500 ${isHovering ? "opacity-100" : "opacity-50"}`}>
+        Python · n8n · GPT-4
+      </div>
+    </div>
+  );
+});
+
 const Home = () => {
   const [text, setText] = useState("")
   const [isTyping, setIsTyping] = useState(true)
   const [wordIndex, setWordIndex] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
-  const [isHovering, setIsHovering] = useState(false)
-  const [imgLoaded, setImgLoaded] = useState(false)
 
   // Optimize AOS initialization
   useEffect(() => {
@@ -179,7 +315,7 @@ const Home = () => {
                 {/* CTA Buttons */}
                 <div className="flex flex-row gap-3 w-full justify-start" data-aos="fade-up" data-aos-delay="1400">
                   <CTAButton href="#Portafolio" text="Proyectos" icon={ExternalLink} />
-                  <CTAButton href="#Contact" text="Contacto" icon={Mail} />
+                  <CTAButton href="mailto:cvemurielsalbador@gmail.com" text="Contacto" icon={Mail} />
                 </div>
 
                 {/* Social Links */}
@@ -191,96 +327,12 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right Column - Zafiro Beauty Showcase */}
+            {/* Right Column - AI Showcase */}
             <div
               className="w-full py-[10%] sm:py-0 lg:w-1/2 h-auto lg:h-[600px] xl:h-[750px] relative flex items-center justify-center order-2 lg:order-2 mt-8 lg:mt-0"
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
               data-aos="fade-left"
               data-aos-delay="600">
-
-              <div className="relative w-full max-w-[520px]">
-
-                {/* Outer glow */}
-                <div className={`absolute -inset-6 rounded-3xl blur-3xl transition-all duration-700 ${
-                  isHovering
-                    ? "opacity-70 scale-105 bg-gradient-to-br from-[#6366f1]/30 to-[#a855f7]/30"
-                    : "opacity-30 scale-100 bg-gradient-to-br from-[#6366f1]/15 to-[#a855f7]/15"
-                }`} />
-
-                {/* Card */}
-                <div className={`relative rounded-2xl overflow-hidden border transition-all duration-500 ${
-                  isHovering ? "border-white/20 scale-[1.02]" : "border-white/10 scale-100"
-                }`}
-                  style={{ boxShadow: isHovering ? '0 0 40px rgba(99,102,241,0.25), 0 0 80px rgba(168,85,247,0.12)' : '0 0 20px rgba(99,102,241,0.1)' }}>
-
-                  {/* Browser chrome */}
-                  <div className="bg-[#080420]/95 backdrop-blur-sm px-4 py-2.5 flex items-center gap-3 border-b border-white/8">
-                    <div className="flex gap-1.5 shrink-0">
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/75" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/75" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/75" />
-                    </div>
-                    <div className="flex-1 bg-white/5 rounded-full px-3 py-1 text-[11px] text-gray-400 font-mono truncate border border-white/8">
-                      zafiro-beauty-web.vercel.app
-                    </div>
-                    <a
-                      href="https://zafiro-beauty-web.vercel.app/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="shrink-0 text-gray-500 hover:text-indigo-400 transition-colors"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-
-                  {/* Screenshot */}
-                  <div className="relative overflow-hidden bg-[#030014]">
-                    <img
-                      src="/ZafiroBeauty.png"
-                      alt="Zafiro Beauty — plataforma de turnos láser"
-                      onLoad={() => setImgLoaded(true)}
-                      className={`w-full object-cover object-top transition-all duration-700 ${
-                        isHovering ? "scale-[1.04]" : "scale-100"
-                      } ${imgLoaded ? "opacity-100" : "opacity-0"}`}
-                      style={{ maxHeight: '360px' }}
-                    />
-
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#030014]/80 pointer-events-none" />
-
-                    {/* Scan line effect */}
-                    <div className="absolute inset-0 pointer-events-none opacity-20"
-                      style={{ background: 'repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(99,102,241,0.04) 3px,rgba(99,102,241,0.04) 4px)' }} />
-                  </div>
-
-                  {/* Footer info */}
-                  <div className="bg-[#080420]/95 backdrop-blur-sm px-4 py-3 flex items-center justify-between border-t border-white/8">
-                    <div>
-                      <p className="text-white font-semibold text-sm leading-tight">Zafiro Beauty</p>
-                      <p className="text-gray-400 text-[11px] mt-0.5">Full-stack · Turnos · MercadoPago</p>
-                    </div>
-                    <a href="#Portafolio"
-                      className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white text-xs font-medium transition-opacity hover:opacity-90 shrink-0">
-                      Ver proyecto
-                    </a>
-                  </div>
-                </div>
-
-                {/* Floating badge: estado */}
-                <div className={`absolute -top-3 -right-2 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-white/10 text-[11px] font-mono transition-all duration-500 ${
-                  isHovering ? "opacity-100 translate-y-0 text-emerald-400 border-emerald-500/30" : "opacity-60 translate-y-0.5 text-emerald-500/70"
-                }`}>
-                  ● En producción
-                </div>
-
-                {/* Floating badge: stack */}
-                <div className={`absolute -bottom-3 -left-2 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-xl border border-white/10 text-[11px] font-mono text-indigo-400 transition-all duration-500 ${
-                  isHovering ? "opacity-100 translate-y-0" : "opacity-50 translate-y-0.5"
-                }`}>
-                  React · NestJS · PostgreSQL
-                </div>
-              </div>
+              <AIShowcaseWidget />
             </div>
           </div>
         </div>

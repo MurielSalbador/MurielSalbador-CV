@@ -1,137 +1,79 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ExternalLink, ArrowRight, Code2 } from 'lucide-react';
 
-const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
-  const cardRef = useRef(null);
-  const [rotation, setRotation] = useState({ x: 0, y: 0 });
-  const [glarePos, setGlarePos] = useState({ x: 50, y: 50 });
+const CardProject = ({ Img, Title, Description, Link: ProjectLink, id, TechStack = [] }) => {
   const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const rotateX = ((y / rect.height) - 0.5) * -18;
-    const rotateY = ((x / rect.width) - 0.5) * 18;
-    setRotation({ x: rotateX, y: rotateY });
-    setGlarePos({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 });
-  };
-
-  const handleMouseLeave = () => {
-    setRotation({ x: 0, y: 0 });
-    setGlarePos({ x: 50, y: 50 });
-    setIsHovered(false);
-  };
-
-  const handleLiveDemo = (e) => {
-    if (!ProjectLink) {
-      e.preventDefault();
-      alert("El enlace al proyecto no está disponible.");
-    }
-  };
-
-  const handleDetails = (e) => {
-    if (!id) {
-      e.preventDefault();
-      alert("Los detalles del proyecto no están disponibles.");
-    }
-  };
 
   return (
     <div
-      ref={cardRef}
-      className="group relative w-full"
-      style={{ perspective: '1000px' }}
-      onMouseMove={handleMouseMove}
+      className="group relative rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-slate-900/80 to-slate-800/60 backdrop-blur-sm transition-all duration-300 hover:border-[#6366f1]/30 hover:shadow-[0_8px_32px_rgba(99,102,241,0.15)] hover:-translate-y-1 flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Glow shadow that follows tilt */}
-      <div
-        className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
-        style={{
-          background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(139,92,246,0.4), rgba(99,102,241,0.2), transparent 70%)`,
-        }}
-      />
+      {/* Top accent line */}
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-      <div
-        style={{
-          transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) ${isHovered ? 'translateZ(8px)' : 'translateZ(0)'}`,
-          transition: isHovered
-            ? 'transform 0.08s linear'
-            : 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)',
-          transformStyle: 'preserve-3d',
-        }}
-        className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg border border-white/10 shadow-2xl"
-      >
-        {/* Glare overlay */}
-        <div
-          className="absolute inset-0 z-20 pointer-events-none rounded-xl transition-opacity duration-300"
-          style={{
-            opacity: isHovered ? 1 : 0,
-            background: `radial-gradient(circle at ${glarePos.x}% ${glarePos.y}%, rgba(255,255,255,0.12) 0%, transparent 55%)`,
-          }}
-        />
-
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-50 group-hover:opacity-70 transition-opacity duration-300" />
-
-        <div className="relative p-5 z-10">
-          {/* Image with 3D depth */}
-          <div
-            className="relative overflow-hidden rounded-lg"
-            style={{ transform: 'translateZ(20px)', transformStyle: 'preserve-3d' }}
-          >
-            <img
-              src={Img}
-              alt={Title}
-              className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
+      {/* Image */}
+      <div className="relative overflow-hidden h-44 shrink-0">
+        {Img ? (
+          <img
+            src={Img}
+            alt={Title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-[#6366f1]/10 to-[#a855f7]/10 flex items-center justify-center">
+            <Code2 className="w-12 h-12 text-[#6366f1]/30" />
           </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent" />
+      </div>
 
-          <div className="mt-4 space-y-3" style={{ transform: 'translateZ(10px)' }}>
-            <h3 className="text-xl font-semibold bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
-              {Title}
-            </h3>
+      {/* Content */}
+      <div className="p-5 space-y-3 flex flex-col flex-1">
+        <h3 className="text-base font-bold text-white leading-snug">{Title}</h3>
+        <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 flex-1">{Description}</p>
 
-            <p className="text-gray-300/80 text-sm leading-relaxed line-clamp-2">
-              {Description}
-            </p>
-
-            <div className="pt-4 flex items-center justify-between">
-              {ProjectLink ? (
-                <a
-                  href={ProjectLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={handleLiveDemo}
-                  className="inline-flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors duration-200"
-                >
-                  <span className="text-sm font-medium">Ver Proyecto</span>
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-              ) : (
-                <span className="text-gray-500 text-sm">Sin demo</span>
-              )}
-
-              {id ? (
-                <Link
-                  to={`/project/${id}`}
-                  onClick={handleDetails}
-                  className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/90 transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
-                >
-                  <span className="text-sm font-medium">Detalles</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              ) : (
-                <span className="text-gray-500 text-sm">Sin detalles</span>
-              )}
-            </div>
+        {/* Tech stack badges */}
+        {TechStack.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-0.5">
+            {TechStack.slice(0, 4).map((tech, i) => (
+              <span
+                key={i}
+                className="px-2 py-0.5 text-[10px] rounded-full bg-[#6366f1]/10 text-[#a78bfa] border border-[#6366f1]/20 font-mono"
+              >
+                {tech}
+              </span>
+            ))}
+            {TechStack.length > 4 && (
+              <span className="px-2 py-0.5 text-[10px] rounded-full bg-white/5 text-gray-500 border border-white/10">
+                +{TechStack.length - 4}
+              </span>
+            )}
           </div>
+        )}
+
+        {/* Actions */}
+        <div className="pt-1 flex items-center gap-2 flex-wrap">
+          {ProjectLink ? (
+            <a
+              href={ProjectLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white text-xs font-medium hover:opacity-90 transition-all duration-200 hover:scale-105"
+            >
+              Ver Proyecto <ExternalLink className="w-3 h-3" />
+            </a>
+          ) : null}
+          {id ? (
+            <Link
+              to={`/project/${id}`}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-white/10 text-gray-400 text-xs hover:bg-white/5 hover:text-white hover:border-white/20 transition-all duration-200"
+            >
+              Detalles <ArrowRight className="w-3 h-3" />
+            </Link>
+          ) : null}
         </div>
       </div>
     </div>
