@@ -243,6 +243,37 @@ const PROJECTS = [
     ],
     TechStack: ["Next.js", "React 19", "TypeScript", "TailwindCSS", "PostgreSQL", "Prisma", "Auth.js"],
   },
+  {
+    id: 6,
+    Title: "Neura Sistemas",
+    Description: "Sitio institucional para Neura Sistemas, un estudio de desarrollo de software que crea soluciones a medida para pymes y comercios: sitios web, automatización, CRM y chatbots.",
+    Img: "/NeuraSistemas.png",
+    Link: "https://neurasistemas.com.ar",
+    Github: ["https://github.com/Aquiles-diaz/neurasistemas"],
+    Features: [
+      "Sitio 100% estático generado con Next.js (output export), sin servidor ni base de datos, optimizado para velocidad y costos.",
+      "Formularios de contacto gestionados con EmailJS desde el cliente, con fallback automático a mailto si faltan las variables de entorno.",
+      "Secciones completas de landing: Hero, Solución, Stack tecnológico, Servicios, Casos reales, Testimonios, Packs de precios y FAQ.",
+      "Animaciones de scroll con la librería motion respetando prefers-reduced-motion.",
+      "Despliegue automático en Vercel en cada push a la rama main.",
+    ],
+    TechStack: ["Next.js 15", "React 19", "TypeScript", "TailwindCSS", "EmailJS", "Vercel"],
+  },
+  {
+    id: 7,
+    Title: "Decomar Pinturas",
+    Description: "Sitio web para Decomar, estudio de pintura y decoración integral. Presenta servicios, portfolio de obras y un sistema de cotización rápida vía WhatsApp.",
+    Img: "/DecomarPinturas.png",
+    Link: "https://decomarpinturas-web.vercel.app",
+    Github: ["https://github.com/MurielSalbador/decomarpinturas"],
+    Features: [
+      "Presupuesto Express integrado con WhatsApp para contacto inmediato con clientes.",
+      "Secciones de Servicios, Portfolio de trabajos, Nosotros y Contacto.",
+      "Arquitectura monorepo con Turborepo y componentes shadcn/ui.",
+      "Diseño con gradientes y estética moderna orientada a conversión.",
+    ],
+    TechStack: ["React", "Vite", "TypeScript", "TailwindCSS", "shadcn/ui", "Turborepo"],
+  },
 ];
 
 const CERTIFICATES = [
