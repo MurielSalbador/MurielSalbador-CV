@@ -274,6 +274,22 @@ const PROJECTS = [
     ],
     TechStack: ["React", "Vite", "TypeScript", "TailwindCSS", "shadcn/ui", "Turborepo"],
   },
+  {
+    id: 8,
+    Title: "RDR Seguridad Privada",
+    Description: "Landing institucional para RDR Seguridad Privada, empresa de Rosario. Presenta servicios de control de acceso, monitoreo, patrullaje y custodia personal, con formulario de contacto integrado a MongoDB y notificaciones por email.",
+    Img: "/RDRSegurity.png",
+    Link: "https://rdr-web.vercel.app",
+    Github: ["https://github.com/MurielSalbador/RDR-SEGURITY"],
+    Features: [
+      "Animaciones de entrada con GSAP/ScrollTrigger y scroll suave con Lenis.",
+      "Formulario de contacto con validación Zod, almacenamiento en MongoDB Atlas y notificaciones por email vía Resend.",
+      "Seis servicios detallados: control de acceso, monitoreo, patrullaje, custodia personal, capacitación y supervisión.",
+      "Banner promocional de análisis técnico gratuito y botón flotante de WhatsApp.",
+      "Barra de estado operativo fija que muestra disponibilidad 24/7.",
+    ],
+    TechStack: ["Astro", "React 19", "TypeScript", "GSAP", "MongoDB Atlas", "Resend", "Zod"],
+  },
 ];
 
 const CERTIFICATES = [
