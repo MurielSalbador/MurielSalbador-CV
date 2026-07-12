@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const NeuralNetwork = () => {
   const canvasRef = useRef(null);
@@ -12,9 +12,16 @@ const NeuralNetwork = () => {
     let targetRotY = 0, targetRotX = 0;
     let autoAngle = 0;
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Escala por devicePixelRatio para que no se vea borroso en pantallas retina
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -45,7 +52,7 @@ const NeuralNetwork = () => {
     }));
 
     // Make hub nodes bigger and slower
-    nodes.forEach((n, i) => {
+    nodes.forEach((n) => {
       if (n.isHub) {
         n.baseSize = Math.random() * 2 + 3;
         n.vx *= 0.4;
@@ -87,14 +94,14 @@ const NeuralNetwork = () => {
     };
 
     const project = (x, y, z) => {
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
       const scale = FOV / (FOV + z + 500);
       return { sx: cx + x * scale, sy: cy + y * scale, scale };
     };
 
     const draw = (time) => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
       autoAngle = time * 0.00008;
       rotY += (targetRotY + autoAngle - rotY) * 0.03;
@@ -181,7 +188,7 @@ const NeuralNetwork = () => {
       }
 
       // Draw nodes
-      projected.forEach((p, i) => {
+      projected.forEach((p) => {
         if (p.scale < 0.15) return;
         const pv = (Math.sin(p.pulse) + 1) / 2;
         const mdx = p.sx - mouse.x, mdy = p.sy - mouse.y;
@@ -225,7 +232,13 @@ const NeuralNetwork = () => {
       animId = requestAnimationFrame(draw);
     };
 
-    animId = requestAnimationFrame(draw);
+    if (reducedMotion) {
+      // Un solo frame estático: la red se ve, pero no se anima
+      draw(0);
+      cancelAnimationFrame(animId);
+    } else {
+      animId = requestAnimationFrame(draw);
+    }
 
     return () => {
       cancelAnimationFrame(animId);

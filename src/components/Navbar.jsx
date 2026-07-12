@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { scrollToTarget } from "../lib/scroll";
+
+const navItems = [
+    { href: "#Home", label: "Home" },
+    { href: "#About", label: "Sobre Mí" },
+    { href: "#Portafolio", label: "Portafolio" },
+];
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState("Home");
-    
-    const navItems = [
-        { href: "#Home", label: "Home" },
-        { href: "#About", label: "Sobre Mí" },
-        { href: "#Portafolio", label: "Portafolio" },
-    ];
 
     useEffect(() => {
         const handleScroll = () => {
@@ -53,14 +54,7 @@ const Navbar = () => {
 
     const scrollToSection = (e, href) => {
         e.preventDefault();
-        const section = document.querySelector(href);
-        if (section) {
-            const top = section.offsetTop - 100;
-            window.scrollTo({
-                top: top,
-                behavior: "smooth"
-            });
-        }
+        scrollToTarget(href);
         setIsOpen(false);
     };
 
@@ -123,6 +117,8 @@ const Navbar = () => {
                     <div className="md:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
+                            aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+                            aria-expanded={isOpen}
                             className={`relative p-2 text-[#e2d3fd] hover:text-white transition-transform duration-300 ease-in-out transform ${
                                 isOpen ? "rotate-90 scale-125" : "rotate-0 scale-100"
                             }`}

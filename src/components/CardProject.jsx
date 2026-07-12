@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink, ArrowRight, Code2 } from 'lucide-react';
 
+const MAX_TILT = 6; // grados
+
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id, TechStack = [] }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current;
+    if (!card || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(1000px) rotateX(${-py * MAX_TILT}deg) rotateY(${px * MAX_TILT}deg) translateY(-4px)`;
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    if (card) card.style.transform = '';
+  };
 
   return (
     <div
-      className="group relative rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-slate-900/80 to-slate-800/60 backdrop-blur-sm transition-all duration-300 hover:border-[#6366f1]/30 hover:shadow-[0_8px_32px_rgba(99,102,241,0.15)] hover:-translate-y-1 flex flex-col"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      ref={cardRef}
+      className="group relative rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-slate-900/80 to-slate-800/60 backdrop-blur-sm transition-transform duration-200 ease-out hover:border-[#6366f1]/30 hover:shadow-[0_8px_32px_rgba(99,102,241,0.15)] flex flex-col will-change-transform"
+      style={{ transformStyle: 'preserve-3d' }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Top accent line */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -20,6 +38,9 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id, TechStack
           <img
             src={Img}
             alt={Title}
+            width="400"
+            height="176"
+            loading="lazy"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (

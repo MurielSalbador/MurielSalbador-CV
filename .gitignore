@@ -24,3 +24,5 @@ dist/
 *.sln
 *.sw?
 *.env
+# Database dumps
+*.sql

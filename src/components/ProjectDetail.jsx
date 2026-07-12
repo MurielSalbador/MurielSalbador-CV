@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   ArrowLeft,
   ExternalLink,
@@ -7,14 +7,13 @@ import {
   Code2,
   Star,
   ChevronRight,
-  Layers,
   Layout,
   Globe,
   Package,
   Cpu,
   Code,
 } from "lucide-react";
-import Swal from "sweetalert2";
+import { PROJECTS } from "../data/projects";
 
 const TECH_ICONS = {
   React: Globe,
@@ -59,7 +58,6 @@ const FeatureItem = ({ feature }) => {
 
 const ProjectStats = ({ project }) => {
   const techStackCount = project?.TechStack?.length || 0;
-  const featuresCount = project?.Features?.length || 0;
 
   return (
     <div className="grid grid-cols-2 gap-3 md:gap-4 p-3 md:p-4 bg-[#0a0a1a] rounded-xl overflow-hidden relative">
@@ -77,7 +75,7 @@ const ProjectStats = ({ project }) => {
             {techStackCount}
           </div>
           <div className="text-[10px] md:text-xs text-gray-400">
-            Tecnología total
+            Tecnologías usadas
           </div>
         </div>
       </div>
@@ -85,54 +83,41 @@ const ProjectStats = ({ project }) => {
   );
 };
 
-const handleGithubClick = (githubLink) => {
-  if (githubLink === "Private") {
-    Swal.fire({
-      icon: "info",
-      title: "Source Code Private",
-      text: "Maaf, source code untuk proyek ini bersifat privat.",
-      confirmButtonText: "Mengerti",
-      confirmButtonColor: "#3085d6",
-      background: "#030014",
-      color: "#ffffff",
-    });
-    return false;
-  }
-  return true;
-};
-
 const ProjectDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [project, setProject] = useState(null);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  const project = useMemo(() => {
+    const found = PROJECTS.find((p) => String(p.id) === id);
+    if (!found) return null;
+    return {
+      ...found,
+      Features: found.Features || [],
+      TechStack: found.TechStack || [],
+      Github: (found.Github || []).filter(Boolean),
+    };
+  }, [id]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const storedProjects = JSON.parse(localStorage.getItem("projects")) || [];
-    const selectedProject = storedProjects.find((p) => String(p.id) === id);
-
-    if (selectedProject) {
-      const enhancedProject = {
-        ...selectedProject,
-        Features: selectedProject.Features || [],
-        TechStack: selectedProject.TechStack || [],
-        Github: Array.isArray(selectedProject.Github)
-  ? selectedProject.Github
-  : [selectedProject.Github || 'https://github.com/MurielSalbador'],
-      };
-      setProject(enhancedProject);
-    }
   }, [id]);
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center">
-        <div className="text-center space-y-6 animate-fadeIn">
-          <div className="w-16 h-16 md:w-24 md:h-24 mx-auto border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+      <div className="min-h-screen bg-[#030014] flex items-center justify-center px-4">
+        <div className="text-center space-y-6">
           <h2 className="text-xl md:text-3xl font-bold text-white">
-            Loading Project...
+            Proyecto no encontrado
           </h2>
+          <p className="text-gray-400">
+            El proyecto que buscás no existe o fue movido.
+          </p>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white text-sm font-medium hover:opacity-90 transition-opacity"
+          >
+            <ArrowLeft className="w-4 h-4" /> Volver al inicio
+          </Link>
         </div>
       </div>
     );
@@ -147,7 +132,6 @@ const ProjectDetails = () => {
           <div className="absolute top-0 -right-4 w-72 md:w-96 h-72 md:h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
           <div className="absolute -bottom-8 left-20 w-72 md:w-96 h-72 md:h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
         </div>
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
       </div>
 
       <div className="relative">
@@ -202,49 +186,27 @@ const ProjectDetails = () => {
                   </a>
                 )}
 
-                {project.Github && (Array.isArray(project.Github) ? (
-                  project.Github.filter(link => link && link !== '[]').length > 0 && 
-                  project.Github.filter(link => link && link !== '[]').map((link, idx) => (
-                    <a
-                      key={idx}
-                      href={link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) =>
-                        !handleGithubClick(link) && e.preventDefault()
-                      }
-                      className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-gradient-to-r from-purple-600/10 to-pink-600/10 hover:from-purple-600/20 hover:to-pink-600/20 text-purple-300 rounded-xl transition-all duration-300 border border-purple-500/20 hover:border-purple-500/40 backdrop-blur-xl overflow-hidden text-sm md:text-base"
-                    >
-                      <div className="absolute inset-0 translate-y-[100%] bg- gradient-to-r from-purple-600/10 to-pink-600/10 transition-transform duration-300 group-hover:translate-y-[0%]" />
-                      <Github className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
-                      <span className="relative font-medium">
-                        Github {project.Github.filter(l => l && l !== '[]').length > 1 ? `(${idx + 1})` : ""}
-                      </span>
-                    </a>
-                  ))
-                ) : (
-                  project.Github !== '[]' && (
-                    <a
-                      href={project.Github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) =>
-                        !handleGithubClick(project.Github) && e.preventDefault()
-                      }
-                      className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-gradient-to-r from-purple-600/10 to-pink-600/10 hover:from-purple-600/20 hover:to-pink-600/20 text-purple-300 rounded-xl transition-all duration-300 border border-purple-500/20 hover:border-purple-500/40 backdrop-blur-xl overflow-hidden text-sm md:text-base"
-                    >
-                      <div className="absolute inset-0 translate-y-[100%] bg-gradient-to-r from-purple-600/10 to-pink-600/10 transition-transform duration-300 group-hover:translate-y-[0%]" />
-                      <Github className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
-                      <span className="relative font-medium">Github</span>
-                    </a>
-                  )
+                {project.Github.map((link, idx) => (
+                  <a
+                    key={idx}
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-gradient-to-r from-purple-600/10 to-pink-600/10 hover:from-purple-600/20 hover:to-pink-600/20 text-purple-300 rounded-xl transition-all duration-300 border border-purple-500/20 hover:border-purple-500/40 backdrop-blur-xl overflow-hidden text-sm md:text-base"
+                  >
+                    <div className="absolute inset-0 translate-y-[100%] bg-gradient-to-r from-purple-600/10 to-pink-600/10 transition-transform duration-300 group-hover:translate-y-[0%]" />
+                    <Github className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
+                    <span className="relative font-medium">
+                      GitHub{project.Github.length > 1 ? ` (${idx + 1})` : ""}
+                    </span>
+                  </a>
                 ))}
               </div>
 
               <div className="space-y-4 md:space-y-6">
                 <h3 className="text-lg md:text-xl font-semibold text-white/90 mt-[3rem] md:mt-0 flex items-center gap-2 md:gap-3">
                   <Code2 className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
-                  Technologias Usadas
+                  Tecnologías usadas
                 </h3>
                 {project.TechStack.length > 0 ? (
                   <div className="flex flex-wrap gap-2 md:gap-3">
@@ -266,17 +228,16 @@ const ProjectDetails = () => {
                 <img
                   src={project.Img}
                   alt={project.Title}
-                  className="w-full  object-cover transform transition-transform duration-700 will-change-transform group-hover:scale-105"
-                  onLoad={() => setIsImageLoaded(true)}
+                  className="w-full object-cover transform transition-transform duration-700 will-change-transform group-hover:scale-105"
                 />
                 <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/10 transition-colors duration-300 rounded-2xl" />
               </div>
 
-              {/* Fitur Utama */}
+              {/* Características principales */}
               <div className="bg-white/[0.02] backdrop-blur-xl rounded-2xl p-8 border border-white/10 space-y-6 hover:border-white/20 transition-colors duration-300 group">
                 <h3 className="text-xl font-semibold text-white/90 flex items-center gap-3">
                   <Star className="w-5 h-5 text-yellow-400 group-hover:rotate-[20deg] transition-transform duration-300" />
-                  Fitur Principales
+                  Características principales
                 </h3>
                 {project.Features.length > 0 ? (
                   <ul className="list-none space-y-2">
@@ -286,7 +247,6 @@ const ProjectDetails = () => {
                   </ul>
                 ) : (
                   <p className="text-gray-400 opacity-50">
-                    {" "}
                     No se han añadido características.
                   </p>
                 )}

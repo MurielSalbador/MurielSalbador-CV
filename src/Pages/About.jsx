@@ -1,7 +1,7 @@
-import React, { useEffect, memo, useMemo, useState } from "react";
+import { memo, useMemo } from "react";
 import { FileText, Code, Award, Globe, ArrowUpRight, Sparkles } from "lucide-react"
-import AOS from 'aos'
-import 'aos/dist/aos.css'
+import { PROJECTS, CERTIFICATES, YEARS_EXPERIENCE } from "../data/projects"
+import { scrollToTarget } from "../lib/scroll"
 
 // Memoized Components
 const Header = memo(() => (
@@ -50,7 +50,7 @@ const ProfileImage = memo(() => (
           <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 via-transparent to-blue-500/20 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 hidden sm:block" />
           
           <img
-            src="/yo.jpg"
+            src="/yo.webp"
             alt="Profile"
             className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2"
             loading="lazy"
@@ -113,56 +113,32 @@ const StatCard = memo(({ icon: Icon, color, value, label, description, animation
 ));
 
 const AboutPage = () => {
-const [projects, setProjects] = useState([]);
-const [certificates, setCertificates] = useState([]);
-
-useEffect(() => {
-  const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
-  const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
-  setProjects(storedProjects);
-  setCertificates(storedCertificates);
-}, []);
-
-const YearExperience = 4; // Valor fijo
-
-const totalProjects = projects.length;
-const totalCertificates = certificates.length;
-
-  // Optimized AOS initialization
-  useEffect(() => {
-    const initAOS = () => {
-      AOS.init({
-        once: false, 
-      });
-    };
-
-    initAOS();
-    
-    // Debounced resize handler
-    let resizeTimer;
-    const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(initAOS, 250);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(resizeTimer);
-    };
-  }, []);
-
-  // Memoized stats data
   const statsData = useMemo(() => [
+    {
+      icon: Code,
+      color: "from-[#6366f1] to-[#a855f7]",
+      value: PROJECTS.length,
+      label: "Proyectos",
+      description: "Sitios y aplicaciones desarrollados",
+      animation: "fade-right",
+    },
+    {
+      icon: Award,
+      color: "from-[#a855f7] to-[#6366f1]",
+      value: CERTIFICATES.length,
+      label: "Certificados",
+      description: "Formación y cursos completados",
+      animation: "fade-up",
+    },
     {
       icon: Globe,
       color: "from-[#6366f1] to-[#a855f7]",
-      value: YearExperience,
+      value: YEARS_EXPERIENCE,
       label: "Años de Experiencia",
-      description: "Desarrollo continuo de paginas web y aplicaciones",
+      description: "Desarrollo continuo de páginas web y aplicaciones",
       animation: "fade-left",
     },
-  ], [totalProjects, totalCertificates, YearExperience]);
+  ], []);
 
   return (
     <div
@@ -196,7 +172,7 @@ const totalCertificates = certificates.length;
               data-aos="fade-right"
               data-aos-duration="1500"
             >
-              Soy desarrollador de software y front-end developer, actualmente
+              Soy desarrolladora de software front-end, actualmente
               cursando la Tecnicatura en Programación en UTN-FRRO. Me
               especializo en crear interfaces modernas y funcionales usando
               tecnologías actuales como React.js, Node.js y TypeScript.
@@ -231,28 +207,29 @@ const totalCertificates = certificates.length;
         </div>
         
         <blockquote className="text-gray-300 text-center lg:text-left italic font-medium text-sm relative z-10 pl-6">
-          "Aprovechar la IA como herramienta profesional, no como reemplazo".
+          &ldquo;Aprovechar la IA como herramienta profesional, no como reemplazo&rdquo;.
         </blockquote>
       </div>
 
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-4 lg:px-0 w-full">
-              <a href="https://drive.google.com/drive/folders/1B6YD0hpZv5_tkrvlN362jCW0-00kC3hU?usp=drive_link" className="w-full lg:w-auto">
-              <button 
+              <a
+                href="https://drive.google.com/drive/folders/1B6YD0hpZv5_tkrvlN362jCW0-00kC3hU?usp=drive_link"
+                target="_blank"
+                rel="noopener noreferrer"
                 data-aos="fade-up"
                 data-aos-duration="800"
-                className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 shadow-lg hover:shadow-xl "
+                className="w-full lg:w-auto px-6 py-2 sm:py-3 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 shadow-lg hover:shadow-xl"
               >
                 <FileText className="w-4 h-4 sm:w-5 sm:h-5" /> Descargar CV
-              </button>
               </a>
-              <a href="#Portafolio" className="w-full lg:w-auto">
-              <button 
+              <a
+                href="#Portafolio"
+                onClick={(e) => { e.preventDefault(); scrollToTarget("#Portafolio"); }}
                 data-aos="fade-up"
                 data-aos-duration="1000"
-                className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg border border-[#a855f7]/50 text-[#a855f7] font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 hover:bg-[#a855f7]/10 "
+                className="w-full lg:w-auto px-6 py-2 sm:py-3 rounded-lg border border-[#a855f7]/50 text-[#a855f7] font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 hover:bg-[#a855f7]/10"
               >
                 <Code className="w-4 h-4 sm:w-5 sm:h-5" /> Ver Proyectos
-              </button>
               </a>
             </div>
           </div>
@@ -260,33 +237,13 @@ const totalCertificates = certificates.length;
           <ProfileImage />
         </div>
 
-        <a href="#Portafolio">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 cursor-pointer">
-            {statsData.map((stat) => (
-              <StatCard key={stat.label} {...stat} />
-            ))}
-          </div>
-        </a>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+          {statsData.map((stat) => (
+            <StatCard key={stat.label} {...stat} />
+          ))}
+        </div>
       </div>
 
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes spin-slower {
-          to { transform: rotate(360deg); }
-        }
-        .animate-bounce-slow {
-          animation: bounce 3s infinite;
-        }
-        .animate-pulse-slow {
-          animation: pulse 3s infinite;
-        }
-        .animate-spin-slower {
-          animation: spin-slower 8s linear infinite;
-        }
-      `}</style>
     </div>
   );
 };

@@ -1,33 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Code2, Github, Globe, User } from 'lucide-react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-
-const TypewriterEffect = ({ text }) => {
-  const [displayText, setDisplayText] = useState('');
-  
-  useEffect(() => {
-    let index = 0;
-    const timer = setInterval(() => {
-      if (index <= text.length) {
-        setDisplayText(text.slice(0, index));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 260);
-    
-    return () => clearInterval(timer);
-  }, [text]);
-
-  return (
-    <span className="inline-block">
-      {displayText}
-      <span className="animate-pulse">|</span>
-    </span>
-  );
-};
+import { Code2, Github, User } from 'lucide-react';
 
 const BackgroundEffect = () => (
   <div className="absolute inset-0 overflow-hidden">
@@ -49,19 +22,13 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: false,
-      mirror: false,
-    });
-
     const timer = setTimeout(() => {
       setIsLoading(false);
       setTimeout(() => {
         onLoadingComplete?.();
-      }, 1000);
-    }, 4000);
-    
+      }, 800);
+    }, 1500);
+
     return () => clearTimeout(timer);
   }, [onLoadingComplete]);
 
@@ -123,22 +90,22 @@ const WelcomeScreen = ({ onLoadingComplete }) => {
               >
                 <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold space-y-2 sm:space-y-4">
                   <div className="mb-2 sm:mb-4">
-                    <span data-aos="fade-right" data-aos-delay="200" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                    <span data-aos="fade-right" data-aos-delay="100" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
                       Bienvenidos
                     </span>{' '}
-                    <span data-aos="fade-right" data-aos-delay="400" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-                      A
+                    <span data-aos="fade-right" data-aos-delay="250" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                      a
                     </span>{' '}
-                    <span data-aos="fade-right" data-aos-delay="600" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-                      Mi
+                    <span data-aos="fade-right" data-aos-delay="400" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                      mi
                     </span>
                   </div>
                   <div>
-                    <span data-aos="fade-up" data-aos-delay="800" className="inline-block px-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                      Portfolio
+                    <span data-aos="fade-up" data-aos-delay="550" className="inline-block px-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                      portafolio
                     </span>{' '}
-                    <span data-aos="fade-up" data-aos-delay="1000" className="inline-block px-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                      Web
+                    <span data-aos="fade-up" data-aos-delay="700" className="inline-block px-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                      web
                     </span>
                   </div>
                 </h1>
