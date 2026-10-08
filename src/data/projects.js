@@ -3,6 +3,7 @@ import { Globe, Code, Briefcase, Award, GraduationCap } from "lucide-react";
 export const PROJECTS = [
   {
     id: 2,
+    Color: "#9ccc65",
     Title: "RubioHnos",
     ShortTitle: "RubioHnos",
     Tagline: "Ecommerce saludable",
@@ -19,6 +20,7 @@ export const PROJECTS = [
   },
   {
     id: 3,
+    Color: "#60a5fa",
     Title: "Stock AFIP - Depósitos Fiscales",
     ShortTitle: "Stock AFIP",
     Tagline: "Sistema de depósitos",
@@ -40,6 +42,7 @@ export const PROJECTS = [
   },
   {
     id: 4,
+    Color: "#7c8cff",
     Title: "Zafiro Beauty",
     ShortTitle: "Zafiro Beauty",
     Tagline: "Plataforma de turnos",
@@ -59,6 +62,7 @@ export const PROJECTS = [
   },
   {
     id: 5,
+    Color: "#22d3ee",
     Title: "Neura Sistemas",
     ShortTitle: "Neura Sistemas",
     Tagline: "Sitio institucional",
@@ -78,6 +82,7 @@ export const PROJECTS = [
   },
   {
     id: 6,
+    Color: "#fb923c",
     Title: "Decomar Pinturas",
     ShortTitle: "Decomar Pinturas",
     Tagline: "Sitio web corporativo",
@@ -96,6 +101,7 @@ export const PROJECTS = [
   },
   {
     id: 7,
+    Color: "#f87171",
     Title: "RDR Seguridad Privada",
     ShortTitle: "RDR Seguridad",
     Tagline: "Landing institucional",
@@ -156,29 +162,6 @@ export const EXPERIENCE = [
       "Atención al público y soporte administrativo.",
       "Planificación de eventos y elaboración de informes.",
     ],
-  },
-];
-
-export const EDUCATION = [
-  {
-    id: "edu-1",
-    title: "Tecnicatura Universitaria en Programación – UTN",
-    date: "(2024 - 2025) — Promedio 8.0",
-  },
-  {
-    id: "edu-2",
-    title: "Tecnicatura Superior en Programación – Teclabt",
-    date: "(2023)",
-  },
-  {
-    id: "edu-3",
-    title: "Curso de Desarrollo Web – Colegio Verbo Encarnado",
-    date: "(2022)",
-  },
-  {
-    id: "edu-4",
-    title: "Diploma - Webinar de Bio-Robótica",
-    date: "(2024)",
   },
 ];
 

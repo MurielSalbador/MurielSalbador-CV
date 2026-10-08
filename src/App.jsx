@@ -1,56 +1,58 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, useEffect, lazy, Suspense } from "react";
-import Lenis from "lenis";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import "./index.css";
-import Home from "./Pages/Home";
-import About from "./Pages/About";
-import AnimatedBackground from "./components/Background";
-import Navbar from "./components/Navbar";
-import Portofolio from "./Pages/Portofolio";
-import WelcomeScreen from "./Pages/WelcomeScreen";
-import ScrollProgress from "./components/ScrollProgress";
-import Footer from "./components/Footer";
-import { setLenis } from "./lib/scroll";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
+import Lenis from "lenis";
+import "./index.css";
+import Hero from "./Pages/Home";
+import About from "./Pages/About";
+import Projects from "./Pages/Projects";
+import Journey from "./Pages/Journey";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Preloader from "./components/Preloader";
+import Cursor from "./components/ui/Cursor";
+import { getLenis, scrollToTarget, setLenis } from "./lib/scroll";
 
 const ProjectDetails = lazy(() => import("./components/ProjectDetail"));
 const NotFoundPage = lazy(() => import("./Pages/404"));
 
 const PageLoader = () => (
-  <div className="min-h-screen bg-[#030014] flex items-center justify-center">
-    <div className="w-12 h-12 border-4 border-[#6366f1]/30 border-t-[#6366f1] rounded-full animate-spin" />
+  <div className="flex min-h-screen items-center justify-center">
+    <span className="h-2.5 w-2.5 animate-ping rounded-full bg-acid" />
   </div>
 );
 
-const LandingPage = ({ showWelcome, setShowWelcome }) => {
+const LandingPage = ({ showIntro, onIntroDone }) => {
+  const location = useLocation();
+  const handledKey = useRef(null);
+
+  // Pausamos el scroll mientras corre la intro.
   useEffect(() => {
-    if (!showWelcome) {
-      window.scrollTo(0, 0);
-      AOS.refresh();
-    }
-  }, [showWelcome]);
+    const lenis = getLenis();
+    if (showIntro) lenis?.stop();
+    else lenis?.start();
+  }, [showIntro]);
+
+  // Al volver desde el detalle de un proyecto, saltamos a la sección pedida.
+  useEffect(() => {
+    if (showIntro || handledKey.current === location.key) return;
+    handledKey.current = location.key;
+    const target = location.state?.scrollTo;
+    if (target) requestAnimationFrame(() => scrollToTarget(target, { immediate: true }));
+    else window.scrollTo(0, 0);
+  }, [showIntro, location.key, location.state]);
 
   return (
     <>
-      <AnimatePresence mode="wait">
-        {showWelcome && (
-          <WelcomeScreen onLoadingComplete={() => setShowWelcome(false)} />
-        )}
-      </AnimatePresence>
-
-      {!showWelcome && (
-        <>
-          <ScrollProgress />
-          <Navbar />
-          <AnimatedBackground />
-          <Home />
-          <About />
-          <Portofolio />
-          <Footer />
-        </>
-      )}
+      <AnimatePresence>{showIntro && <Preloader onComplete={onIntroDone} />}</AnimatePresence>
+      <Navbar ready={!showIntro} />
+      <main>
+        <Hero ready={!showIntro} />
+        <About />
+        <Projects />
+        <Journey />
+      </main>
+      <Footer />
     </>
   );
 };
@@ -63,17 +65,15 @@ const ProjectPageLayout = () => (
 );
 
 function App() {
-  const [showWelcome, setShowWelcome] = useState(
-    () => !sessionStorage.getItem("welcomeShown")
-  );
+  const [showIntro, setShowIntro] = useState(() => !sessionStorage.getItem("welcomeShown"));
 
-  const handleWelcomeComplete = () => {
+  const handleIntroDone = useCallback(() => {
     sessionStorage.setItem("welcomeShown", "true");
-    setShowWelcome(false);
-  };
+    setShowIntro(false);
+  }, []);
 
   useEffect(() => {
-    AOS.init({ once: true, offset: 10 });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -81,12 +81,14 @@ function App() {
       smoothWheel: true,
     });
     setLenis(lenis);
+    // Los efectos de los hijos corren antes que este: si la intro está activa, frenamos acá.
+    if (!sessionStorage.getItem("welcomeShown")) lenis.stop();
 
     let rafId;
-    function raf(time) {
+    const raf = (time) => {
       lenis.raf(time);
       rafId = requestAnimationFrame(raf);
-    }
+    };
     rafId = requestAnimationFrame(raf);
 
     return () => {
@@ -98,17 +100,11 @@ function App() {
 
   return (
     <BrowserRouter>
+      <div className="grain" aria-hidden="true" />
+      <Cursor />
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <LandingPage
-                showWelcome={showWelcome}
-                setShowWelcome={handleWelcomeComplete}
-              />
-            }
-          />
+          <Route path="/" element={<LandingPage showIntro={showIntro} onIntroDone={handleIntroDone} />} />
           <Route path="/project/:id" element={<ProjectPageLayout />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
