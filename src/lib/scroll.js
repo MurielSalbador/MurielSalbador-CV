@@ -5,13 +5,15 @@ export const setLenis = (lenis) => {
   lenisInstance = lenis;
 };
 
+export const getLenis = () => lenisInstance;
+
 export const scrollToTarget = (target, options = {}) => {
   if (lenisInstance) {
-    lenisInstance.scrollTo(target, { offset: -100, ...options });
+    lenisInstance.scrollTo(target, { offset: -80, ...options });
   } else {
     const el = typeof target === "string" ? document.querySelector(target) : target;
     if (el) {
-      window.scrollTo({ top: el.offsetTop - 100, behavior: "smooth" });
+      window.scrollTo({ top: el.offsetTop - 80, behavior: options.immediate ? "auto" : "smooth" });
     }
   }
 };

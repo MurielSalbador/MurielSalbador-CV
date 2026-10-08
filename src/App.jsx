@@ -1,56 +1,44 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, useEffect, lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect, useRef, lazy, Suspense } from "react";
 import Lenis from "lenis";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import "./index.css";
-import Home from "./Pages/Home";
+import Hero, { TechBand } from "./Pages/Home";
+import Projects from "./Pages/Projects";
 import About from "./Pages/About";
-import AnimatedBackground from "./components/Background";
+import Journey from "./Pages/Journey";
 import Navbar from "./components/Navbar";
-import Portofolio from "./Pages/Portofolio";
-import WelcomeScreen from "./Pages/WelcomeScreen";
-import ScrollProgress from "./components/ScrollProgress";
 import Footer from "./components/Footer";
-import { setLenis } from "./lib/scroll";
-import { AnimatePresence } from "framer-motion";
+import { scrollToTarget, setLenis } from "./lib/scroll";
 
 const ProjectDetails = lazy(() => import("./components/ProjectDetail"));
 const NotFoundPage = lazy(() => import("./Pages/404"));
 
-const PageLoader = () => (
-  <div className="min-h-screen bg-[#030014] flex items-center justify-center">
-    <div className="w-12 h-12 border-4 border-[#6366f1]/30 border-t-[#6366f1] rounded-full animate-spin" />
-  </div>
-);
+const PageLoader = () => <div className="min-h-screen bg-ink" />;
 
-const LandingPage = ({ showWelcome, setShowWelcome }) => {
+const LandingPage = () => {
+  const location = useLocation();
+  const handledKey = useRef(null);
+
+  // Al volver desde el detalle de un proyecto, saltamos a la sección pedida.
   useEffect(() => {
-    if (!showWelcome) {
-      window.scrollTo(0, 0);
-      AOS.refresh();
-    }
-  }, [showWelcome]);
+    if (handledKey.current === location.key) return;
+    handledKey.current = location.key;
+    const target = location.state?.scrollTo;
+    if (target) requestAnimationFrame(() => scrollToTarget(target, { immediate: true }));
+    else window.scrollTo(0, 0);
+  }, [location.key, location.state]);
 
   return (
     <>
-      <AnimatePresence mode="wait">
-        {showWelcome && (
-          <WelcomeScreen onLoadingComplete={() => setShowWelcome(false)} />
-        )}
-      </AnimatePresence>
-
-      {!showWelcome && (
-        <>
-          <ScrollProgress />
-          <Navbar />
-          <AnimatedBackground />
-          <Home />
-          <About />
-          <Portofolio />
-          <Footer />
-        </>
-      )}
+      <Navbar />
+      <main>
+        <Hero />
+        <TechBand />
+        <Projects />
+        <About />
+        <Journey />
+      </main>
+      <Footer />
     </>
   );
 };
@@ -63,17 +51,8 @@ const ProjectPageLayout = () => (
 );
 
 function App() {
-  const [showWelcome, setShowWelcome] = useState(
-    () => !sessionStorage.getItem("welcomeShown")
-  );
-
-  const handleWelcomeComplete = () => {
-    sessionStorage.setItem("welcomeShown", "true");
-    setShowWelcome(false);
-  };
-
   useEffect(() => {
-    AOS.init({ once: true, offset: 10 });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -83,10 +62,10 @@ function App() {
     setLenis(lenis);
 
     let rafId;
-    function raf(time) {
+    const raf = (time) => {
       lenis.raf(time);
       rafId = requestAnimationFrame(raf);
-    }
+    };
     rafId = requestAnimationFrame(raf);
 
     return () => {
@@ -100,15 +79,7 @@ function App() {
     <BrowserRouter>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <LandingPage
-                showWelcome={showWelcome}
-                setShowWelcome={handleWelcomeComplete}
-              />
-            }
-          />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/project/:id" element={<ProjectPageLayout />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

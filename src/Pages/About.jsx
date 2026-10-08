@@ -1,251 +1,204 @@
-import { memo, useMemo } from "react";
-import { FileText, Code, Award, Globe, ArrowUpRight, Sparkles } from "lucide-react"
-import { PROJECTS, CERTIFICATES, YEARS_EXPERIENCE } from "../data/projects"
-import { scrollToTarget } from "../lib/scroll"
+import { memo } from "react";
+import { motion } from "framer-motion";
+import { Compass, Sparkles, Target, Bot, Palette } from "lucide-react";
+import {
+  SiReact, SiNodedotjs, SiMongodb, SiExpress, SiTypescript, SiFigma, SiN8N, SiSupabase,
+  SiGithub, SiPostman, SiVercel, SiNotion,
+} from "react-icons/si";
+import { BarChart3 } from "lucide-react";
+import { PROJECTS, CERTIFICATES, YEARS_EXPERIENCE, PROCESS } from "../data/projects";
+import { Reveal } from "../components/ui/Reveal";
+import SectionTitle from "../components/ui/SectionTitle";
 
-// Memoized Components
-const Header = memo(() => (
-  <div className="text-center lg:mb-8 mb-2 px-[5%]">
-    <div className="inline-block relative group">
-      <h2 
-        className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]" 
-        data-aos="zoom-in-up"
-        data-aos-duration="600"
-      >
-        Sobre Mí
-      </h2>
-    </div>
-    <p 
-      className="mt-2 text-gray-400 max-w-2xl mx-auto text-base sm:text-lg flex items-center justify-center gap-2"
-      data-aos="zoom-in-up"
-      data-aos-duration="800"
-    >
-      <Sparkles className="w-5 h-5 text-purple-400" />
-      Transformando ideas en experiencias digitales
-      <Sparkles className="w-5 h-5 text-purple-400" />
-    </p>
-  </div>
-));
+const STATS = [
+  { value: `${PROJECTS.length}+`, label: "Proyectos realizados" },
+  { value: `${YEARS_EXPERIENCE}+`, label: "Años de experiencia" },
+  { value: CERTIFICATES.length, label: "Formaciones" },
+  { value: "24/7", label: "Aprendiendo" },
+];
 
-const ProfileImage = memo(() => (
-  <div className="flex justify-end items-center sm:p-12 sm:py-0 sm:pb-0 p-0 py-2 pb-2">
-    <div 
-      className="relative group" 
-      data-aos="fade-up"
-      data-aos-duration="1000"
-    >
-      {/* Optimized gradient backgrounds with reduced complexity for mobile */}
-      <div className="absolute -inset-6 opacity-[25%] z-0 hidden sm:block">
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-600 via-indigo-500 to-purple-600 rounded-full blur-2xl animate-spin-slower" />
-        <div className="absolute inset-0 bg-gradient-to-l from-fuchsia-500 via-rose-500 to-pink-600 rounded-full blur-2xl animate-pulse-slow opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-600 via-cyan-500 to-teal-400 rounded-full blur-2xl animate-float opacity-50" />
-      </div>
+const CARDS = [
+  {
+    icon: Compass,
+    title: "Mi filosofía",
+    text: "Combinar diseño cuidado con tecnologías modernas para crear experiencias únicas, rápidas y fáciles de usar.",
+  },
+  {
+    icon: Target,
+    title: "Mi misión",
+    text: "Transformar ideas complejas en interfaces claras, responsivas y pensadas para las personas que las usan.",
+  },
+  {
+    icon: Bot,
+    title: "IA como herramienta",
+    text: "“Aprovechar la IA como herramienta profesional, no como reemplazo.” Automatizo con n8n y agentes.",
+  },
+];
 
-      <div className="relative">
-        <div className="w-72 h-72 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-[0_0_40px_rgba(120,119,198,0.3)] transform transition-all duration-700 group-hover:scale-105">
-          <div className="absolute inset-0 border-4 border-white/20 rounded-full z-20 transition-all duration-700 group-hover:border-white/40 group-hover:scale-105" />
-          
-          {/* Optimized overlay effects - disabled on mobile */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 z-10 transition-opacity duration-700 group-hover:opacity-0 hidden sm:block" />
-          <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 via-transparent to-blue-500/20 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 hidden sm:block" />
-          
-          <img
-            src="/yo.webp"
-            alt="Profile"
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2"
-            loading="lazy"
-          />
+const ORBIT_INNER = [
+  { icon: SiReact, color: "#61DAFB" },
+  { icon: SiNodedotjs, color: "#5FA04E" },
+  { icon: SiMongodb, color: "#47A248" },
+  { icon: SiExpress, color: "#e5e5e5" },
+];
+const ORBIT_OUTER = [
+  { icon: SiTypescript, color: "#3178C6" },
+  { icon: SiFigma, color: "#F24E1E" },
+  { icon: SiN8N, color: "#EA4B71" },
+  { icon: SiSupabase, color: "#3FCF8E" },
+  { icon: SiGithub, color: "#ffffff" },
+  { icon: BarChart3, color: "#F2C811" },
+];
 
-          {/* Advanced hover effects - desktop only */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-20 hidden sm:block">
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-white/10 to-transparent transform translate-y-full group-hover:-translate-y-full transition-transform duration-1000 delay-100" />
-            <div className="absolute inset-0 rounded-full border-8 border-white/10 scale-0 group-hover:scale-100 transition-transform duration-700 animate-pulse-slow" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-));
+const TOOLS = [
+  { name: "Figma", icon: SiFigma, color: "#F24E1E" },
+  { name: "React", icon: SiReact, color: "#61DAFB" },
+  { name: "Node.js", icon: SiNodedotjs, color: "#5FA04E" },
+  { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+  { name: "n8n", icon: SiN8N, color: "#EA4B71" },
+  { name: "Supabase", icon: SiSupabase, color: "#3FCF8E" },
+  { name: "Postman", icon: SiPostman, color: "#FF6C37" },
+  { name: "Vercel", icon: SiVercel, color: "#ffffff" },
+  { name: "Power BI", icon: BarChart3, color: "#F2C811" },
+  { name: "Canva", icon: Palette, color: "#00C4CC" },
+  { name: "Notion", icon: SiNotion, color: "#ffffff" },
+  { name: "GitHub", icon: SiGithub, color: "#ffffff" },
+];
 
-const StatCard = memo(({ icon: Icon, color, value, label, description, animation }) => (
-  <div data-aos={animation} data-aos-duration={1300} className="relative group">
-    <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl p-6 border border-white/10 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl h-full flex flex-col justify-between">
-      <div className={`absolute -z-10 inset-0 bg-gradient-to-br ${color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
-      
-      <div className="flex items-center justify-between mb-4">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 transition-transform group-hover:rotate-6">
-          <Icon className="w-8 h-8 text-white" />
-        </div>
-        <span 
-          className="text-4xl font-bold text-white"
-          data-aos="fade-up-left"
-          data-aos-duration="1500"
-          data-aos-anchor-placement="top-bottom"
+// Órbita de tecnologías: los anillos giran y los íconos contra-giran para quedar derechos.
+const Ring = ({ items, size, duration, reverse = false }) => (
+  <motion.div
+    className="absolute left-1/2 top-1/2 rounded-full border border-rose/20"
+    style={{ width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
+    animate={{ rotate: reverse ? -360 : 360 }}
+    transition={{ duration, repeat: Infinity, ease: "linear" }}
+  >
+    {items.map(({ icon: Icon, color }, i) => {
+      const angle = (i / items.length) * Math.PI * 2;
+      return (
+        <motion.span
+          key={i}
+          className="absolute flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-ink-100 shadow-lg shadow-black/50"
+          style={{
+            left: size / 2 + Math.cos(angle) * (size / 2) - 22,
+            top: size / 2 + Math.sin(angle) * (size / 2) - 22,
+          }}
+          animate={{ rotate: reverse ? 360 : -360 }}
+          transition={{ duration, repeat: Infinity, ease: "linear" }}
         >
-          {value}
-        </span>
-      </div>
+          <Icon className="h-5 w-5" style={{ color }} />
+        </motion.span>
+      );
+    })}
+  </motion.div>
+);
 
-      <div>
-        <p 
-          className="text-sm uppercase tracking-wider text-gray-300 mb-2"
-          data-aos="fade-up"
-          data-aos-duration="800"
-          data-aos-anchor-placement="top-bottom"
-        >
-          {label}
-        </p>
-        <div className="flex items-center justify-between">
-          <p 
-            className="text-xs text-gray-400"
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            data-aos-anchor-placement="top-bottom"
-          >
-            {description}
-          </p>
-          <ArrowUpRight className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
-        </div>
-      </div>
+const Orbit = () => (
+  <div className="relative mx-auto h-[340px] w-[340px] sm:h-[400px] sm:w-[400px]" aria-hidden="true">
+    <div className="absolute inset-[30%] rounded-full bg-rose/30 blur-3xl" />
+    <Ring items={ORBIT_OUTER} size={330} duration={40} reverse />
+    <Ring items={ORBIT_INNER} size={200} duration={26} />
+    <div className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-rose/50 bg-gradient-to-br from-rose-600 to-rose-900 shadow-[0_0_60px_rgba(255,79,147,0.6)]">
+      <span className="font-display text-3xl font-semibold italic text-white">MS</span>
     </div>
   </div>
-));
+);
 
-const AboutPage = () => {
-  const statsData = useMemo(() => [
-    {
-      icon: Code,
-      color: "from-[#6366f1] to-[#a855f7]",
-      value: PROJECTS.length,
-      label: "Proyectos",
-      description: "Sitios y aplicaciones desarrollados",
-      animation: "fade-right",
-    },
-    {
-      icon: Award,
-      color: "from-[#a855f7] to-[#6366f1]",
-      value: CERTIFICATES.length,
-      label: "Certificados",
-      description: "Formación y cursos completados",
-      animation: "fade-up",
-    },
-    {
-      icon: Globe,
-      color: "from-[#6366f1] to-[#a855f7]",
-      value: YEARS_EXPERIENCE,
-      label: "Años de Experiencia",
-      description: "Desarrollo continuo de páginas web y aplicaciones",
-      animation: "fade-left",
-    },
-  ], []);
-
-  return (
-    <div
-      className="h-auto pb-[10%] text-white overflow-hidden px-[5%] sm:px-[5%] lg:px-[10%] mt-10 sm-mt-0" 
-      id="About"
-    >
-      <Header />
-
-      <div className="w-full mx-auto pt-8 sm:pt-12 relative">
-        <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <div className="space-y-6 text-center lg:text-left">
-            <h2 
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold"
-              data-aos="fade-right"
-              data-aos-duration="1000"
-            >
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
-                Hola, Soy
-              </span>
-              <span 
-                className="block mt-2 text-gray-200"
-                data-aos="fade-right"
-                data-aos-duration="1300"
-              >
-                Muriel Elen Salbador
-              </span>
-            </h2>
-            
-            <p 
-              className="text-base sm:text-lg lg:text-xl text-gray-400 leading-relaxed text-justify pb-4 sm:pb-0"
-              data-aos="fade-right"
-              data-aos-duration="1500"
-            >
-              Soy desarrolladora de software front-end, actualmente
-              cursando la Tecnicatura en Programación en UTN-FRRO. Me
-              especializo en crear interfaces modernas y funcionales usando
-              tecnologías actuales como React.js, Node.js y TypeScript.
+const About = () => (
+  <section id="About" className="relative overflow-hidden py-24 lg:py-32">
+    <div className="container-x">
+      {/* Conoceme */}
+      <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-4">
+          <Reveal className="label text-rose">Conoceme</Reveal>
+          <Reveal as="h2" delay={0.05} className="mt-3 font-display text-5xl font-medium sm:text-6xl">
+            Sobre <em className="text-rose text-glow">mí</em>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-6 space-y-4 text-sm leading-relaxed text-sand-200 sm:text-base">
+            <p>
+              Soy <strong className="font-medium text-sand">Muriel Elen Salbador</strong>, desarrolladora de software
+              front-end y Técnica en Programación por la Universidad Tecnológica Nacional (UTN Rosario). Me especializo en interfaces modernas con React,
+              Node.js y TypeScript.
             </p>
-
-<p 
-              className="text-base sm:text-lg lg:text-xl text-gray-400 leading-relaxed text-justify pb-4 sm:pb-0"
-              data-aos="fade-right"
-              data-aos-duration="1500"
-            >
-              Tengo experiencia en bases de datos SQL y NoSQL, desarrollo web
-              full-stack, visualización de datos con Power BI y diseño UI/UX en
-              Figma y Canva.
+            <p>
+              Trabajo con bases de datos SQL y NoSQL, visualización de datos con Power BI y diseño UI/UX en Figma y
+              Canva. Me encanta convertir ideas en realidad a través del código y el diseño.
             </p>
-           
-
-               {/* Quote Section */}
-      <div 
-        className="relative bg-gradient-to-br from-[#6366f1]/5 via-transparent to-[#a855f7]/5 border border-gradient-to-r border-[#6366f1]/30 rounded-2xl p-4 my-6 backdrop-blur-md shadow-2xl overflow-hidden"
-        data-aos="fade-up"
-        data-aos-duration="1700"
-      >
-        {/* Floating orbs background */}
-        <div className="absolute top-2 right-4 w-16 h-16 bg-gradient-to-r from-[#6366f1]/20 to-[#a855f7]/20 rounded-full blur-xl"></div>
-        <div className="absolute -bottom-4 -left-2 w-12 h-12 bg-gradient-to-r from-[#a855f7]/20 to-[#6366f1]/20 rounded-full blur-lg"></div>
-        
-        {/* Quote icon */}
-        <div className="absolute top-3 left-4 text-[#6366f1] opacity-30">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
-          </svg>
-        </div>
-        
-        <blockquote className="text-gray-300 text-center lg:text-left italic font-medium text-sm relative z-10 pl-6">
-          &ldquo;Aprovechar la IA como herramienta profesional, no como reemplazo&rdquo;.
-        </blockquote>
-      </div>
-
-            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-4 lg:px-0 w-full">
-              <a
-                href="https://drive.google.com/drive/folders/1B6YD0hpZv5_tkrvlN362jCW0-00kC3hU?usp=drive_link"
-                target="_blank"
-                rel="noopener noreferrer"
-                data-aos="fade-up"
-                data-aos-duration="800"
-                className="w-full lg:w-auto px-6 py-2 sm:py-3 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 shadow-lg hover:shadow-xl"
-              >
-                <FileText className="w-4 h-4 sm:w-5 sm:h-5" /> Descargar CV
-              </a>
-              <a
-                href="#Portafolio"
-                onClick={(e) => { e.preventDefault(); scrollToTarget("#Portafolio"); }}
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                className="w-full lg:w-auto px-6 py-2 sm:py-3 rounded-lg border border-[#a855f7]/50 text-[#a855f7] font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 hover:bg-[#a855f7]/10"
-              >
-                <Code className="w-4 h-4 sm:w-5 sm:h-5" /> Ver Proyectos
-              </a>
-            </div>
-          </div>
-
-          <ProfileImage />
+          </Reveal>
+          <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6">
+            {STATS.map((s, i) => (
+              <Reveal key={s.label} delay={0.15 + i * 0.05}>
+                <dd className="font-mono text-3xl font-bold text-rose text-glow">{s.value}</dd>
+                <dt className="mt-1 text-xs text-sand-400">{s.label}</dt>
+              </Reveal>
+            ))}
+          </dl>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-          {statsData.map((stat) => (
-            <StatCard key={stat.label} {...stat} />
+        <Reveal delay={0.1} className="lg:col-span-4">
+          <Orbit />
+        </Reveal>
+
+        <div className="space-y-4 lg:col-span-4">
+          {CARDS.map(({ icon: Icon, title, text }, i) => (
+            <Reveal key={title} delay={0.1 + i * 0.08}>
+              <div className="group rounded-2xl border border-white/[0.08] bg-ink-100/70 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose/40 hover:shadow-[0_10px_40px_-15px_rgba(255,79,147,0.6)]">
+                <h3 className="flex items-center gap-2 font-mono text-sm font-bold text-rose">
+                  <Icon className="h-4 w-4" /> {title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-sand-200">{text}</p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </div>
 
-    </div>
-  );
-};
+      {/* Proceso + herramientas (grilla editorial) */}
+      <div className="mt-24 grid border border-white/[0.08] lg:mt-32 lg:grid-cols-2">
+        <div className="relative overflow-hidden border-b border-white/[0.08] p-6 sm:p-8 lg:border-b-0 lg:border-r">
+          <SectionTitle>Mi proceso</SectionTitle>
+          <ol className="mt-6">
+            {PROCESS.map((step, i) => (
+              <Reveal as="li" key={step.title} delay={i * 0.06}>
+                <div className="group flex gap-5 border-b border-white/[0.06] py-4 last:border-0">
+                  <span className="font-display text-3xl text-sand-400 transition-colors duration-300 group-hover:text-rose">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-widest transition-transform duration-300 group-hover:translate-x-1">
+                      {step.title}
+                    </p>
+                    <p className="mt-1 text-sm text-sand-400">{step.text}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
+          <Sparkles className="absolute -bottom-6 -right-6 h-32 w-32 text-rose/10" aria-hidden="true" />
+        </div>
 
-export default memo(AboutPage);
+        <div className="p-6 sm:p-8">
+          <SectionTitle>Herramientas que uso</SectionTitle>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {TOOLS.map(({ name, icon: Icon, color }, i) => (
+              <Reveal key={name} delay={i * 0.03}>
+                <div className="group flex items-center gap-3 rounded-lg border border-white/[0.06] bg-ink-100/70 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-rose/40">
+                  <span
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: `${color}1f` }}
+                  >
+                    <Icon className="h-5 w-5" style={{ color }} />
+                  </span>
+                  <span className="text-xs font-medium uppercase tracking-wider">{name}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <p className="label mt-6">& muchas herramientas más ✦</p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+export default memo(About);

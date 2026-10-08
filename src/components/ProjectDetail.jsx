@@ -1,102 +1,52 @@
-import { useEffect, useMemo } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  ExternalLink,
-  Github,
-  Code2,
-  Star,
-  ChevronRight,
-  Layout,
-  Globe,
-  Package,
-  Cpu,
-  Code,
-} from "lucide-react";
+import { useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Github, Layers, Sparkles, Tag } from "lucide-react";
 import { PROJECTS } from "../data/projects";
+import { Reveal } from "./ui/Reveal";
+import SectionTitle from "./ui/SectionTitle";
+import { EASE } from "./ui/motion";
 
-const TECH_ICONS = {
-  React: Globe,
-  Tailwind: Layout,
-  Express: Cpu,
-  Python: Code,
-  Javascript: Code,
-  HTML: Code,
-  CSS: Code,
-  default: Package,
-};
+const pad = (n) => String(n).padStart(2, "0");
 
-const TechBadge = ({ tech }) => {
-  const Icon = TECH_ICONS[tech] || TECH_ICONS["default"];
+const fadeUp = (delay) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, ease: EASE, delay },
+});
 
-  return (
-    <div className="group relative overflow-hidden px-3 py-2 md:px-4 md:py-2.5 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-xl border border-blue-500/10 hover:border-blue-500/30 transition-all duration-300 cursor-default">
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-500" />
-      <div className="relative flex items-center gap-1.5 md:gap-2">
-        <Icon className="w-3.5 h-3.5 md:w-4 md:h-4 text-blue-400 group-hover:text-blue-300 transition-colors" />
-        <span className="text-xs md:text-sm font-medium text-blue-300/90 group-hover:text-blue-200 transition-colors">
-          {tech}
-        </span>
-      </div>
+const NavCard = ({ project, label, direction }) => (
+  <Link
+    to={`/project/${project.id}`}
+    className={`group flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-ink-100/60 p-3 transition-all duration-300 hover:border-white/20 ${
+      direction === "next" ? "flex-row-reverse text-right" : ""
+    }`}
+  >
+    <img
+      src={project.Img}
+      alt=""
+      loading="lazy"
+      className="h-16 w-24 shrink-0 rounded-lg object-cover object-top transition-transform duration-500 group-hover:scale-105"
+    />
+    <div className="min-w-0 flex-1">
+      <p className="label">{label}</p>
+      <p className="mt-1 truncate font-semibold text-sand transition-colors group-hover:text-rose">{project.Title}</p>
     </div>
-  );
-};
-
-const FeatureItem = ({ feature }) => {
-  return (
-    <li className="group flex items-start space-x-3 p-2.5 md:p-3.5 rounded-xl hover:bg-white/5 transition-all duration-300 border border-transparent hover:border-white/10">
-      <div className="relative mt-2">
-        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-full blur group-hover:opacity-100 opacity-0 transition-opacity duration-300" />
-        <div className="relative w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 group-hover:scale-125 transition-transform duration-300" />
-      </div>
-      <span className="text-sm md:text-base text-gray-300 group-hover:text-white transition-colors">
-        {feature}
-      </span>
-    </li>
-  );
-};
-
-const ProjectStats = ({ project }) => {
-  const techStackCount = project?.TechStack?.length || 0;
-
-  return (
-    <div className="grid grid-cols-2 gap-3 md:gap-4 p-3 md:p-4 bg-[#0a0a1a] rounded-xl overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20 opacity-50 blur-2xl z-0" />
-
-      <div className="relative z-10 flex items-center space-x-2 md:space-x-3 bg-white/5 p-2 md:p-3 rounded-lg border border-blue-500/20 transition-all duration-300 hover:scale-105 hover:border-blue-500/50 hover:shadow-lg">
-        <div className="bg-blue-500/20 p-1.5 md:p-2 rounded-full">
-          <Code2
-            className="text-blue-300 w-4 h-4 md:w-6 md:h-6"
-            strokeWidth={1.5}
-          />
-        </div>
-        <div className="flex-grow">
-          <div className="text-lg md:text-xl font-semibold text-blue-200">
-            {techStackCount}
-          </div>
-          <div className="text-[10px] md:text-xs text-gray-400">
-            Tecnologías usadas
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+    <span
+      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink transition-transform duration-300 group-hover:scale-110"
+      style={{ background: project.Color }}
+    >
+      {direction === "next" ? <ArrowRight className="h-4 w-4" /> : <ArrowLeft className="h-4 w-4" />}
+    </span>
+  </Link>
+);
 
 const ProjectDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const project = useMemo(() => {
-    const found = PROJECTS.find((p) => String(p.id) === id);
-    if (!found) return null;
-    return {
-      ...found,
-      Features: found.Features || [],
-      TechStack: found.TechStack || [],
-      Github: (found.Github || []).filter(Boolean),
-    };
-  }, [id]);
+  const index = PROJECTS.findIndex((p) => String(p.id) === id);
+  const project = index >= 0 ? PROJECTS[index] : null;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -104,221 +54,170 @@ const ProjectDetails = () => {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-[#030014] flex items-center justify-center px-4">
-        <div className="text-center space-y-6">
-          <h2 className="text-xl md:text-3xl font-bold text-white">
-            Proyecto no encontrado
-          </h2>
-          <p className="text-gray-400">
-            El proyecto que buscás no existe o fue movido.
-          </p>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white text-sm font-medium hover:opacity-90 transition-opacity"
-          >
-            <ArrowLeft className="w-4 h-4" /> Volver al inicio
+      <div className="flex min-h-screen items-center justify-center px-5">
+        <div className="space-y-6 text-center">
+          <h1 className="font-display text-4xl">Proyecto no encontrado</h1>
+          <p className="text-sand-200">El proyecto que buscás no existe o fue movido.</p>
+          <Link to="/" className="btn-rose">
+            <ArrowLeft className="h-4 w-4" /> Volver al inicio
           </Link>
         </div>
       </div>
     );
   }
 
+  const prev = PROJECTS[(index - 1 + PROJECTS.length) % PROJECTS.length];
+  const next = PROJECTS[(index + 1) % PROJECTS.length];
+  const repos = (project.Github || []).filter(Boolean);
+  const meta = [
+    { icon: Tag, label: "Tipo", value: project.Tagline },
+    { icon: Layers, label: "Tecnologías", value: project.TechStack.length },
+    { icon: Sparkles, label: "Estado", value: project.Link ? "En producción" : "Repositorio" },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#030014] px-[2%] sm:px-0 relative overflow-hidden">
-      {/* Background animations remain unchanged */}
-      <div className="fixed inset-0">
-        <div className="absolute -inset-[10px] opacity-20">
-          <div className="absolute top-0 -left-4 w-72 md:w-96 h-72 md:h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
-          <div className="absolute top-0 -right-4 w-72 md:w-96 h-72 md:h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
-          <div className="absolute -bottom-8 left-20 w-72 md:w-96 h-72 md:h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
-        </div>
-      </div>
+    <main key={project.id} className="relative overflow-hidden" style={{ "--accent": project.Color }}>
+      <div
+        className="pointer-events-none absolute right-0 top-0 h-[40vw] w-[40vw] -translate-y-1/3 translate-x-1/4 rounded-full opacity-20 blur-[140px]"
+        style={{ background: project.Color }}
+        aria-hidden="true"
+      />
 
-      <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
-          <div className="flex items-center space-x-2 md:space-x-4 mb-8 md:mb-12 animate-fadeIn">
-            <button
-              onClick={() => navigate("/")}
-              className="group inline-flex items-center space-x-1.5 md:space-x-2 px-3 md:px-5 py-2 md:py-2.5 bg-white/5 backdrop-blur-xl rounded-xl text-white/90 hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20 text-sm md:text-base"
+      <header className="container-x relative flex items-center justify-between py-6">
+        <button
+          type="button"
+          onClick={() => navigate("/", { state: { scrollTo: "#Proyectos" } })}
+          className="btn-outline group px-5 py-2.5 text-xs"
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" /> Proyectos
+        </button>
+        <span className="font-mono text-xs text-sand-400">
+          <span style={{ color: project.Color }}>{pad(index + 1)}</span> / {pad(PROJECTS.length)}
+        </span>
+      </header>
+
+      {/* Encabezado: info + imagen */}
+      <section className="container-x relative grid items-center gap-12 pb-20 pt-6 lg:grid-cols-12 lg:gap-10 lg:pt-10">
+        <div className="lg:col-span-6">
+          <motion.p {...fadeUp(0)} className="font-mono text-xs uppercase tracking-[0.2em]" style={{ color: project.Color }}>
+            {project.Tagline}
+          </motion.p>
+          <motion.h1
+            {...fadeUp(0.05)}
+            className="mt-3 text-4xl font-semibold leading-[1.05] tracking-tight text-sand sm:text-5xl lg:text-6xl"
+          >
+            {project.Title}
+          </motion.h1>
+          <motion.p {...fadeUp(0.12)} className="mt-5 max-w-xl text-base leading-relaxed text-sand-200 sm:text-lg">
+            {project.Description}
+          </motion.p>
+
+          <motion.div {...fadeUp(0.2)} className="mt-7 flex flex-wrap gap-3">
+            {project.Link && (
+              <a href={project.Link} target="_blank" rel="noopener noreferrer" className="btn-rose group">
+                Ver sitio en vivo
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:rotate-45" />
+              </a>
+            )}
+            {repos.map((href, i) => (
+              <a
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={!project.Link && i === 0 ? "btn-rose group" : "btn-outline group text-xs"}
+              >
+                <Github className="h-4 w-4" />
+                {repos.length > 1 ? `Código ${i + 1}` : "Ver código"}
+              </a>
+            ))}
+          </motion.div>
+
+          <motion.dl {...fadeUp(0.28)} className="mt-10 grid grid-cols-3 gap-3">
+            {meta.map(({ icon: Icon, label, value }) => (
+              <div key={label} className="rounded-xl border border-white/[0.08] bg-ink-100/60 p-4">
+                <dt className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-sand-400">
+                  <Icon className="h-3.5 w-3.5" style={{ color: project.Color }} /> {label}
+                </dt>
+                <dd className="mt-2 text-sm font-medium text-sand">{value}</dd>
+              </div>
+            ))}
+          </motion.dl>
+        </div>
+
+        {/* Imagen sobre el disco del color del proyecto */}
+        <motion.div
+          initial={{ opacity: 0, rotate: 8, scale: 0.9 }}
+          animate={{ opacity: 1, rotate: 0, scale: 1 }}
+          transition={{ duration: 1, ease: EASE, delay: 0.15 }}
+          className="relative mx-auto w-full max-w-[520px] lg:col-span-6"
+        >
+          <div
+            className="absolute inset-[8%] rounded-full"
+            style={{ background: project.Color, boxShadow: `0 0 120px -20px ${project.Color}` }}
+            aria-hidden="true"
+          >
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.35),transparent_55%)]" />
+            <div className="absolute inset-[12%] rounded-full border border-white/25" />
+          </div>
+          <div className="relative flex aspect-square items-center justify-center">
+            <div className="w-[94%] animate-float overflow-hidden rounded-xl border border-white/20 bg-ink shadow-[0_40px_80px_-20px_rgba(0,0,0,0.85)]">
+              <div className="flex items-center gap-1.5 border-b border-white/10 bg-ink-100 px-3 py-2">
+                <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
+                <span className="h-2 w-2 rounded-full bg-[#febc2e]" />
+                <span className="h-2 w-2 rounded-full bg-[#28c840]" />
+                <span className="ml-2 truncate font-mono text-[10px] text-sand-400">
+                  {project.Link ? project.Link.replace(/^https?:\/\//, "").replace(/\/$/, "") : project.ShortTitle}
+                </span>
+              </div>
+              <img
+                src={project.Img}
+                alt={`Captura de ${project.Title}`}
+                className="aspect-[16/10] w-full object-cover object-top"
+              />
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Características */}
+      <section className="container-x relative border-t border-white/[0.08] py-20">
+        <SectionTitle className="mb-8">Características principales</SectionTitle>
+        <div className="grid gap-4 md:grid-cols-2">
+          {project.Features.map((feature, i) => (
+            <Reveal key={feature} delay={i * 0.05}>
+              <div className="group flex h-full gap-4 rounded-2xl border border-white/[0.08] bg-ink-100/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[color:var(--accent)]">
+                <span
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-mono text-xs font-bold text-ink"
+                  style={{ background: project.Color }}
+                >
+                  {pad(i + 1)}
+                </span>
+                <p className="text-sm leading-relaxed text-sand-200 sm:text-[15px]">{feature}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <SectionTitle className="mb-6 mt-16">Tecnologías</SectionTitle>
+        <Reveal className="flex flex-wrap gap-2">
+          {project.TechStack.map((tech) => (
+            <span
+              key={tech}
+              className="rounded-full border border-white/10 bg-ink-100/60 px-4 py-2 text-sm text-sand transition-colors hover:border-[color:var(--accent)]"
             >
-              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Volver</span>
-            </button>
-            <div className="flex items-center space-x-1 md:space-x-2 text-sm md:text-base text-white/50">
-              <span>Proyectos</span>
-              <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="text-white/90 truncate">{project.Title}</span>
-            </div>
-          </div>
+              {tech}
+            </span>
+          ))}
+        </Reveal>
+      </section>
 
-          <div className="grid lg:grid-cols-2 gap-8 md:gap-16">
-            <div className="space-y-6 md:space-y-10 animate-slideInLeft">
-              <div className="space-y-4 md:space-y-6">
-                <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent leading-tight">
-                  {project.Title}
-                </h1>
-                <div className="relative h-1 w-16 md:w-24">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-sm" />
-                </div>
-              </div>
-
-              <div className="prose prose-invert max-w-none">
-                <p className="text-base md:text-lg text-gray-300/90 leading-relaxed">
-                  {project.Description}
-                </p>
-              </div>
-
-              <ProjectStats project={project} />
-
-              <div className="flex flex-wrap gap-3 md:gap-4">
-                {/* Action buttons */}
-                {project.Link && (
-                  <a
-                    href={project.Link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-gradient-to-r from-blue-600/10 to-purple-600/10 hover:from-blue-600/20 hover:to-purple-600/20 text-blue-300 rounded-xl transition-all duration-300 border border-blue-500/20 hover:border-blue-500/40 backdrop-blur-xl overflow-hidden text-sm md:text-base"
-                  >
-                    <div className="absolute inset-0 translate-y-[100%] bg-gradient-to-r from-blue-600/10 to-purple-600/10 transition-transform duration-300 group-hover:translate-y-[0%]" />
-                    <ExternalLink className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
-                    <span className="relative font-medium">Demo en vivo</span>
-                  </a>
-                )}
-
-                {project.Github.map((link, idx) => (
-                  <a
-                    key={idx}
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative inline-flex items-center space-x-1.5 md:space-x-2 px-4 md:px-8 py-2.5 md:py-4 bg-gradient-to-r from-purple-600/10 to-pink-600/10 hover:from-purple-600/20 hover:to-pink-600/20 text-purple-300 rounded-xl transition-all duration-300 border border-purple-500/20 hover:border-purple-500/40 backdrop-blur-xl overflow-hidden text-sm md:text-base"
-                  >
-                    <div className="absolute inset-0 translate-y-[100%] bg-gradient-to-r from-purple-600/10 to-pink-600/10 transition-transform duration-300 group-hover:translate-y-[0%]" />
-                    <Github className="relative w-4 h-4 md:w-5 md:h-5 group-hover:rotate-12 transition-transform" />
-                    <span className="relative font-medium">
-                      GitHub{project.Github.length > 1 ? ` (${idx + 1})` : ""}
-                    </span>
-                  </a>
-                ))}
-              </div>
-
-              <div className="space-y-4 md:space-y-6">
-                <h3 className="text-lg md:text-xl font-semibold text-white/90 mt-[3rem] md:mt-0 flex items-center gap-2 md:gap-3">
-                  <Code2 className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
-                  Tecnologías usadas
-                </h3>
-                {project.TechStack.length > 0 ? (
-                  <div className="flex flex-wrap gap-2 md:gap-3">
-                    {project.TechStack.map((tech, index) => (
-                      <TechBadge key={index} tech={tech} />
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm md:text-base text-gray-400 opacity-50">
-                    No se han añadido tecnologías.
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="space-y-6 md:space-y-10 animate-slideInRight">
-              <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
-                <div className="absolute inset-0 bg-gradient-to-t from-[#030014] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <img
-                  src={project.Img}
-                  alt={project.Title}
-                  className="w-full object-cover transform transition-transform duration-700 will-change-transform group-hover:scale-105"
-                />
-                <div className="absolute inset-0 border-2 border-white/0 group-hover:border-white/10 transition-colors duration-300 rounded-2xl" />
-              </div>
-
-              {/* Características principales */}
-              <div className="bg-white/[0.02] backdrop-blur-xl rounded-2xl p-8 border border-white/10 space-y-6 hover:border-white/20 transition-colors duration-300 group">
-                <h3 className="text-xl font-semibold text-white/90 flex items-center gap-3">
-                  <Star className="w-5 h-5 text-yellow-400 group-hover:rotate-[20deg] transition-transform duration-300" />
-                  Características principales
-                </h3>
-                {project.Features.length > 0 ? (
-                  <ul className="list-none space-y-2">
-                    {project.Features.map((feature, index) => (
-                      <FeatureItem key={index} feature={feature} />
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-400 opacity-50">
-                    No se han añadido características.
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes blob {
-          0% {
-            transform: translate(0px, 0px) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-          100% {
-            transform: translate(0px, 0px) scale(1);
-          }
-        }
-        .animate-blob {
-          animation: blob 10s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.7s ease-out;
-        }
-        .animate-slideInLeft {
-          animation: slideInLeft 0.7s ease-out;
-        }
-        .animate-slideInRight {
-          animation: slideInRight 0.7s ease-out;
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
-    </div>
+      {/* Navegación entre proyectos */}
+      <nav aria-label="Otros proyectos" className="container-x grid gap-4 border-t border-white/[0.08] py-12 sm:grid-cols-2">
+        <NavCard project={prev} label="Anterior" direction="prev" />
+        <NavCard project={next} label="Siguiente" direction="next" />
+      </nav>
+    </main>
   );
 };
 
