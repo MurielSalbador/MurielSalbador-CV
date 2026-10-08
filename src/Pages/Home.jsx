@@ -17,13 +17,14 @@ import { EASE } from "../components/ui/motion";
 const ROLES = ["Desarrolladora Front-end", "Full-Stack MERN", "Automatización con IA", "Diseño UI/UX"];
 
 // Posiciones de las miniaturas que flotan alrededor de la foto (inspo: collage flotante).
+// Alrededor de la foto, que está a la derecha.
 const FLOAT_SPOTS = [
-  { top: "17%", left: "16%", depth: 18 },
-  { top: "13%", left: "74%", depth: 26 },
-  { top: "40%", left: "8%", depth: 32 },
-  { top: "37%", left: "84%", depth: 14 },
-  { top: "50%", left: "28%", depth: 22 },
-  { top: "47%", left: "64%", depth: 30 },
+  { top: "34%", left: "54%", depth: 18 },
+  { top: "56%", left: "51%", depth: 26 },
+  { top: "77%", left: "56%", depth: 32 },
+  { top: "36%", left: "93%", depth: 14 },
+  { top: "58%", left: "95%", depth: 22 },
+  { top: "80%", left: "91%", depth: 30 },
 ];
 
 const TECH = [
@@ -128,31 +129,31 @@ const Hero = () => {
       <div className="container-x relative flex min-h-[100svh] flex-col pb-8 pt-24 sm:pt-28">
         {/* Meta superior */}
         <motion.div {...fadeUp(0.1)} className="label relative z-30 flex justify-between gap-4">
-          <span>Full-Stack & UI/UX</span>
-          <span>Portfolio creativo · {new Date().getFullYear()}</span>
+          <span>Técnica en Programación · UTN</span>
+          <span>Portfolio · {new Date().getFullYear()}</span>
         </motion.div>
 
-        {/* Título gigante detrás de la foto */}
+        {/* Palabra gigante: lo que hago */}
         <motion.h1
           style={{ x: titleX }}
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: EASE, delay: 0.15 }}
-          className="relative z-0 mt-2 select-none text-center font-display text-[25vw] font-medium uppercase leading-[0.8] tracking-[-0.04em] text-sand lg:text-[19vw] xl:text-[17rem]"
+          className="relative z-0 mt-3 select-none font-display text-[16.5vw] font-medium uppercase leading-[0.8] tracking-[-0.04em] text-sand lg:text-[14vw] xl:text-[12.5rem]"
         >
-          Muriel
-          <span className="sr-only"> Salbador — desarrolladora full-stack</span>
+          Developer
+          <span className="sr-only"> — Muriel Salbador, desarrolladora full-stack</span>
         </motion.h1>
 
-        {/* Foto recortada, delante del título */}
+        {/* Foto recortada a la derecha, montada sobre el final de la palabra */}
         <motion.div
           style={{ x: photoX }}
-          initial={{ opacity: 0, y: 80 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 80 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.3, ease: EASE, delay: 0.35 }}
-          className="pointer-events-none relative z-10 -mt-[14vw] flex h-[105vw] max-h-[620px] justify-center lg:absolute lg:inset-x-0 lg:bottom-0 lg:mx-auto lg:mt-0 lg:h-[82%] lg:max-h-none"
+          className="pointer-events-none relative z-10 -mt-[6vw] ml-auto flex h-[100vw] max-h-[560px] w-full justify-end lg:absolute lg:bottom-0 lg:right-6 lg:mt-0 lg:h-[84%] lg:max-h-none lg:w-auto"
         >
-          <div className="absolute bottom-[10%] left-1/2 h-2/3 w-1/2 max-w-sm -translate-x-1/2 rounded-full bg-rose/35 blur-[80px]" />
+          <div className="absolute bottom-[10%] right-[10%] h-2/3 w-3/4 max-w-sm rounded-full bg-rose/35 blur-[80px]" />
           <div className="relative h-full drop-shadow-[0_0_28px_rgba(255,79,147,0.35)]">
             <img src="/yo-cutout.webp" alt="Muriel Salbador" className="mask-portrait h-full w-auto object-contain" />
           </div>
@@ -163,51 +164,47 @@ const Hero = () => {
           <FloatingThumb key={p.id} project={p} spot={FLOAT_SPOTS[i]} index={i} mx={smx} my={smy} />
         ))}
 
-        {/* Contenido inferior */}
-        <div className="relative z-30 -mt-16 grid gap-6 lg:mt-auto lg:grid-cols-2">
-          <motion.div {...fadeUp(0.6)} className="max-w-sm space-y-4">
-            <p className="font-mono text-sm leading-relaxed sm:text-base">
-              <span className="text-sand-200">Hola, soy Muriel —</span>
-              <br />
-              <Typewriter words={ROLES} className="text-rose text-glow" />
-            </p>
-            <p className="text-xl font-light uppercase leading-snug tracking-wide text-sand sm:text-2xl">
-              Diseño y desarrollo experiencias web que conectan
-            </p>
+        {/* Texto a la izquierda */}
+        <div className="relative z-30 -mt-24 flex flex-1 flex-col justify-center gap-6 lg:mt-10 lg:max-w-[46%]">
+          <motion.p {...fadeUp(0.5)} className="font-mono text-sm leading-relaxed sm:text-base">
+            <span className="text-sand-200">Hola, soy Muriel Salbador —</span>
+            <br />
+            <Typewriter words={ROLES} className="text-rose text-glow" />
+          </motion.p>
+          <motion.p
+            {...fadeUp(0.6)}
+            className="text-2xl font-light uppercase leading-snug tracking-wide text-sand sm:text-3xl"
+          >
+            Diseño y desarrollo experiencias web que <em className="font-display normal-case italic text-rose">conectan</em>
+          </motion.p>
+          <motion.p {...fadeUp(0.7)} className="max-w-md text-sm leading-relaxed text-sand-200 sm:text-base">
+            Técnica en Programación (UTN-FRRO). Creo sitios y aplicaciones full-stack con React, Node.js y bases de
+            datos, y automatizo procesos con IA — del diseño en Figma al deploy.
+          </motion.p>
+          <motion.div {...fadeUp(0.8)} className="flex flex-wrap items-center gap-3">
+            <button type="button" onClick={() => scrollToTarget("#Proyectos")} className="btn-rose group">
+              Ver proyectos
+              <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
+            </button>
+            <a href={CV_URL} target="_blank" rel="noopener noreferrer" className="btn-outline text-xs">
+              <FileText className="h-4 w-4" /> Descargar CV
+            </a>
+          </motion.div>
+          <motion.div {...fadeUp(0.9)} className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-sand/25 px-4 py-2 font-mono text-[10px] uppercase tracking-widest">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rose" />
               Disponible para proyectos ✦
             </span>
-            <p className="font-script text-5xl leading-none text-rose/90">Muriel Salbador</p>
+            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-sand-400">
+              <Globe className="h-4 w-4 animate-spin-slow" /> Rosario · Remoto
+            </span>
           </motion.div>
-
-          <motion.div {...fadeUp(0.75)} className="flex flex-col gap-5 lg:items-end lg:text-right">
-            <p className="max-w-xs text-sm leading-relaxed text-sand-200">
-              Técnica en Programación (UTN). Creo sitios y aplicaciones modernas, funcionales y centradas en las
-              personas — del diseño en Figma al deploy.
-            </p>
-            <div className="flex items-center gap-3 lg:flex-row-reverse">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-sand/25">
-                <Globe className="h-5 w-5 animate-spin-slow text-sand" />
-              </span>
-              <p className="label leading-relaxed text-sand-200">
-                Basada en Rosario
-                <br />
-                Trabajo remoto
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => scrollToTarget("#Proyectos")}
-              className="group flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-sand hover:text-rose"
-            >
-              Ver proyectos
-              <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
-            </button>
-          </motion.div>
+          <motion.p {...fadeUp(1)} className="font-script text-5xl leading-none text-rose/90">
+            Muriel Salbador
+          </motion.p>
         </div>
 
-        <motion.div {...fadeUp(1)} className="relative z-30 mt-8 flex justify-center">
+        <motion.div {...fadeUp(1.1)} className="relative z-30 mt-8 flex justify-center lg:justify-start">
           <Dock items={dockItems} />
         </motion.div>
       </div>
