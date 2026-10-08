@@ -2,6 +2,27 @@ import { Globe, Code, Briefcase, Award, GraduationCap } from "lucide-react";
 
 export const PROJECTS = [
   {
+    id: 8,
+    Word: "Mística",
+    Color: "#c27a4f",
+    Title: "Mística & Mundana",
+    ShortTitle: "Mística Mundana",
+    Tagline: "Escritura y bienestar",
+    Description:
+      "Sitio para Moksha Dharmanath, un espacio de escritura y acompañamiento espiritual. Reúne un oráculo semanal interactivo, una biblioteca de ebooks y la agenda de próximos encuentros, con una estética editorial y botánica.",
+    Img: "/MisticaMundana.webp",
+    Link: "",
+    Github: ["https://github.com/MurielSalbador/Mistica-Mundana"],
+    Features: [
+      "Oráculo semanal con una carta animada y un cielo de estrellas que se despliega al scrollear.",
+      "Nota personal por semana guardada en el dispositivo (localStorage) y aviso de «Nueva carta para vos».",
+      "Ilustraciones SVG dibujadas en código: luna con rostro, corona botánica y un caracol en espiral logarítmica.",
+      "Biblioteca viva de ebooks descargables y carrete infinito de experiencias.",
+      "Contenido editable desde un único archivo para actualizar el oráculo cada semana sin tocar el diseño.",
+    ],
+    TechStack: ["HTML", "CSS", "JavaScript", "SVG", "LocalStorage"],
+  },
+  {
     id: 2,
     Word: "Rubio",
     Color: "#9ccc65",

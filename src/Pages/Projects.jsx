@@ -19,7 +19,7 @@ const screenVariants = {
   exit: (dir) => ({ rotate: dir * -28, x: dir * -220, y: 60, opacity: 0, scale: 0.75 }),
 };
 
-const RING_TEXT = "MURIEL SALBADOR ✦ PROYECTOS ✦ DISEÑO ✦ DESARROLLO ✦ ";
+const RING_TEXT = "PROYECTOS ✦ DISEÑO ✦ DESARROLLO ✦ CÓDIGO ✦ ";
 
 const Stage = ({ project, turn, dir }) => (
   <div className="relative mx-auto aspect-square w-full max-w-[560px]">
@@ -236,7 +236,7 @@ const Projects = () => {
         </div>
 
         {/* Tarjetas de proyectos */}
-        <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
           {PROJECTS.map((p, i) => {
             const isActive = i === active;
             return (

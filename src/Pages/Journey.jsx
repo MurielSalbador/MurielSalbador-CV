@@ -115,7 +115,7 @@ const Journey = () => {
       <div className="container-x relative">
         <div className="text-center">
           <Reveal as="h2" className="font-display text-5xl font-medium sm:text-6xl">
-            <span className="text-rose">✿</span> Trayectoria <span className="text-rose">✿</span>
+            Trayectoria
           </Reveal>
           <Reveal delay={0.05} className="mt-3 font-mono text-xs text-sand-400 sm:text-sm">
             Experiencia profesional, formación y certificaciones

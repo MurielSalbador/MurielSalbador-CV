@@ -112,7 +112,7 @@ const About = () => (
         <div className="lg:col-span-4">
           <Reveal className="label text-rose">Conoceme</Reveal>
           <Reveal as="h2" delay={0.05} className="mt-3 font-display text-5xl font-medium sm:text-6xl">
-            Sobre <em className="text-rose text-glow">mí</em> ✿
+            Sobre <em className="text-rose text-glow">mí</em>
           </Reveal>
           <Reveal delay={0.1} className="mt-6 space-y-4 text-sm leading-relaxed text-sand-200 sm:text-base">
             <p>

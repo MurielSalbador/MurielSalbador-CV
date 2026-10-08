@@ -167,7 +167,7 @@ const Hero = () => {
         {/* Texto a la izquierda */}
         <div className="relative z-30 -mt-24 flex flex-1 flex-col justify-center gap-6 lg:mt-10 lg:max-w-[46%]">
           <motion.p {...fadeUp(0.5)} className="font-mono text-sm leading-relaxed sm:text-base">
-            <span className="text-sand-200">Hola, soy Muriel Salbador —</span>
+            <span className="text-sand-200">Hola, soy Muriel —</span>
             <br />
             <Typewriter words={ROLES} className="text-rose text-glow" />
           </motion.p>
@@ -199,9 +199,6 @@ const Hero = () => {
               <Globe className="h-4 w-4 animate-spin-slow" /> Rosario · Remoto
             </span>
           </motion.div>
-          <motion.p {...fadeUp(1)} className="font-script text-5xl leading-none text-rose/90">
-            Muriel Salbador
-          </motion.p>
         </div>
 
         <motion.div {...fadeUp(1.1)} className="relative z-30 mt-8 flex justify-center lg:justify-start">
