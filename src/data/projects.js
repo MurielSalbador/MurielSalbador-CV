@@ -3,6 +3,7 @@ import { Globe, Code, Briefcase, Award, GraduationCap } from "lucide-react";
 export const PROJECTS = [
   {
     id: 2,
+    Word: "Rubio",
     Color: "#9ccc65",
     Title: "RubioHnos",
     ShortTitle: "RubioHnos",
@@ -20,6 +21,7 @@ export const PROJECTS = [
   },
   {
     id: 3,
+    Word: "AFIP",
     Color: "#60a5fa",
     Title: "Stock AFIP - Depósitos Fiscales",
     ShortTitle: "Stock AFIP",
@@ -42,6 +44,7 @@ export const PROJECTS = [
   },
   {
     id: 4,
+    Word: "Zafiro",
     Color: "#7c8cff",
     Title: "Zafiro Beauty",
     ShortTitle: "Zafiro Beauty",
@@ -62,6 +65,7 @@ export const PROJECTS = [
   },
   {
     id: 5,
+    Word: "Neura",
     Color: "#22d3ee",
     Title: "Neura Sistemas",
     ShortTitle: "Neura Sistemas",
@@ -82,6 +86,7 @@ export const PROJECTS = [
   },
   {
     id: 6,
+    Word: "Decomar",
     Color: "#fb923c",
     Title: "Decomar Pinturas",
     ShortTitle: "Decomar Pinturas",
@@ -101,6 +106,7 @@ export const PROJECTS = [
   },
   {
     id: 7,
+    Word: "RDR",
     Color: "#f87171",
     Title: "RDR Seguridad Privada",
     ShortTitle: "RDR Seguridad",
@@ -122,11 +128,52 @@ export const PROJECTS = [
 ];
 
 export const CERTIFICATES = [
-  { id: 4, img: "/bio-robotica.webp", title: "Diploma – Webinar de Bio-Robótica", date: "(2024)", icon: Award },
-  { id: 5, img: "/CERTIFICADO.webp", title: "Curso de N8N – Creá tu Agente de Inteligencia Artificial", date: "(2025)", icon: GraduationCap },
-  { id: 1, img: "", title: "Tecnicatura Universitaria en Programación – UTN", date: "(2024 – 2025) — Promedio 8.0", icon: GraduationCap },
-  { id: 2, img: "", title: "Tecnicatura Superior en Programación – Teclabt", date: "(2023)", icon: GraduationCap },
-  { id: 3, img: "", title: "Curso de Desarrollo Web – Colegio Verbo Encarnado", date: "(2022)", icon: GraduationCap },
+  {
+    id: 5,
+    img: "/CERTIFICADO.webp",
+    title: "Curso de N8N – Creá tu Agente de Inteligencia Artificial",
+    issuer: "Curso online",
+    year: "2025",
+    tags: ["n8n", "Agentes IA", "Automatización"],
+    icon: GraduationCap,
+  },
+  {
+    id: 4,
+    img: "/bio-robotica.webp",
+    title: "Diploma – Webinar de Bio-Robótica",
+    issuer: "Webinar",
+    year: "2024",
+    tags: ["Robótica", "Tecnología"],
+    icon: Award,
+  },
+  {
+    id: 1,
+    img: "",
+    title: "Tecnicatura Universitaria en Programación",
+    issuer: "UTN – FRRO",
+    year: "2024 – 2025",
+    detail: "Promedio 8.0",
+    tags: ["Programación", "Bases de datos", "Sistemas"],
+    icon: GraduationCap,
+  },
+  {
+    id: 2,
+    img: "",
+    title: "Tecnicatura Superior en Programación",
+    issuer: "Teclab",
+    year: "2023",
+    tags: ["Programación", "Desarrollo web"],
+    icon: GraduationCap,
+  },
+  {
+    id: 3,
+    img: "",
+    title: "Curso de Desarrollo Web",
+    issuer: "Colegio Verbo Encarnado",
+    year: "2022",
+    tags: ["HTML", "CSS", "JavaScript"],
+    icon: GraduationCap,
+  },
 ];
 
 export const EXPERIENCE = [
@@ -181,3 +228,12 @@ export const SKILL_GROUPS = [
 ];
 
 export const YEARS_EXPERIENCE = 4;
+
+export const PROCESS = [
+  { title: "Descubrir", text: "Entiendo tus objetivos, tu público y lo que necesitás resolver." },
+  { title: "Definir", text: "Investigación, alcance y arquitectura del proyecto." },
+  { title: "Diseñar", text: "Wireframes, prototipos en Figma e identidad visual." },
+  { title: "Desarrollar", text: "Código limpio, responsive y con buenas prácticas." },
+  { title: "Entregar", text: "Pruebas, optimización, deploy y acompañamiento." },
+];
+

@@ -1,237 +1,204 @@
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Bot, Brain, CheckCircle, MapPin, Zap } from "lucide-react";
-import { PROJECTS, CERTIFICATES, YEARS_EXPERIENCE, SKILL_GROUPS } from "../data/projects";
-import useLocalTime from "../lib/useLocalTime";
-import SectionHeading from "../components/ui/SectionHeading";
-import Spotlight from "../components/ui/Spotlight";
-import Counter from "../components/ui/Counter";
+import { Compass, Sparkles, Target, Bot, Palette } from "lucide-react";
+import {
+  SiReact, SiNodedotjs, SiMongodb, SiExpress, SiTypescript, SiFigma, SiN8N, SiSupabase,
+  SiGithub, SiPostman, SiVercel, SiNotion,
+} from "react-icons/si";
+import { BarChart3 } from "lucide-react";
+import { PROJECTS, CERTIFICATES, YEARS_EXPERIENCE, PROCESS } from "../data/projects";
 import { Reveal } from "../components/ui/Reveal";
-import { CV_URL } from "../lib/nav";
-
-const PIPELINE = [
-  { label: "Trigger", icon: Zap },
-  { label: "Agente IA", icon: Brain },
-  { label: "Acción", icon: CheckCircle },
-];
-const BOT_MESSAGES = ["Analizando solicitud…", "Ejecutando agente IA…", "¡Automatización lista!"];
-
-// Mini demo de un flujo de automatización (n8n + IA).
-const AutomationCard = () => {
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => setStep((s) => (s + 1) % 4), 1400);
-    return () => clearInterval(id);
-  }, []);
-
-  return (
-    <div className="flex h-full flex-col justify-between gap-6 p-6 sm:p-8">
-      <div className="flex items-center justify-between">
-        <p className="eyebrow">IA & Automatización</p>
-        <span className="flex items-center gap-1.5 font-mono text-[11px] text-acid">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-acid" /> live
-        </span>
-      </div>
-
-      <div className="flex items-center gap-2">
-        {PIPELINE.map(({ label, icon: Icon }, i) => {
-          const on = step > i;
-          return (
-            <div key={label} className="contents">
-              <div
-                className={`flex flex-1 flex-col items-center gap-2 rounded-2xl border px-2 py-4 transition-all duration-500 ${
-                  on ? "border-acid/40 bg-acid/10" : "border-white/10 bg-white/[0.02]"
-                }`}
-              >
-                <Icon className={`h-5 w-5 transition-colors duration-500 ${on ? "text-acid" : "text-zinc-600"}`} />
-                <span className={`text-[11px] transition-colors duration-500 ${on ? "text-bone" : "text-zinc-600"}`}>
-                  {label}
-                </span>
-              </div>
-              {i < PIPELINE.length - 1 && (
-                <span
-                  className={`h-px w-4 shrink-0 transition-colors duration-500 ${step > i + 1 ? "bg-acid" : "bg-white/15"}`}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-ink/60 p-3">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-acid/15">
-          <Bot className="h-4 w-4 text-acid" />
-        </span>
-        <motion.p
-          key={step}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="pt-1.5 font-mono text-xs text-zinc-300"
-        >
-          {step === 0 ? "Esperando evento…" : BOT_MESSAGES[step - 1]}
-        </motion.p>
-      </div>
-
-      <p className="text-sm text-zinc-400">n8n · GPT · Webhooks · Python</p>
-    </div>
-  );
-};
+import SectionTitle from "../components/ui/SectionTitle";
 
 const STATS = [
-  { value: PROJECTS.length, label: "Proyectos entregados" },
-  { value: CERTIFICATES.length, label: "Formaciones y cursos" },
-  { value: YEARS_EXPERIENCE, suffix: "+", label: "Años de experiencia" },
+  { value: `${PROJECTS.length}+`, label: "Proyectos realizados" },
+  { value: `${YEARS_EXPERIENCE}+`, label: "Años de experiencia" },
+  { value: CERTIFICATES.length, label: "Formaciones" },
+  { value: "24/7", label: "Aprendiendo" },
 ];
 
-const About = () => {
-  const time = useLocalTime();
+const CARDS = [
+  {
+    icon: Compass,
+    title: "Mi filosofía",
+    text: "Combinar diseño cuidado con tecnologías modernas para crear experiencias únicas, rápidas y fáciles de usar.",
+  },
+  {
+    icon: Target,
+    title: "Mi misión",
+    text: "Transformar ideas complejas en interfaces claras, responsivas y pensadas para las personas que las usan.",
+  },
+  {
+    icon: Bot,
+    title: "IA como herramienta",
+    text: "“Aprovechar la IA como herramienta profesional, no como reemplazo.” Automatizo con n8n y agentes.",
+  },
+];
 
-  return (
-    <section id="About" className="relative py-28 md:py-40">
-      <div className="container-x">
-        <SectionHeading
-          index="01"
-          eyebrow="Sobre mí"
-          lines={[
-            <>Código con</>,
-            <>
-              <em className="font-serif font-normal italic text-acid">criterio</em> de diseño.
-            </>,
-          ]}
+const ORBIT_INNER = [
+  { icon: SiReact, color: "#61DAFB" },
+  { icon: SiNodedotjs, color: "#5FA04E" },
+  { icon: SiMongodb, color: "#47A248" },
+  { icon: SiExpress, color: "#e5e5e5" },
+];
+const ORBIT_OUTER = [
+  { icon: SiTypescript, color: "#3178C6" },
+  { icon: SiFigma, color: "#F24E1E" },
+  { icon: SiN8N, color: "#EA4B71" },
+  { icon: SiSupabase, color: "#3FCF8E" },
+  { icon: SiGithub, color: "#ffffff" },
+  { icon: BarChart3, color: "#F2C811" },
+];
+
+const TOOLS = [
+  { name: "Figma", icon: SiFigma, color: "#F24E1E" },
+  { name: "React", icon: SiReact, color: "#61DAFB" },
+  { name: "Node.js", icon: SiNodedotjs, color: "#5FA04E" },
+  { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+  { name: "n8n", icon: SiN8N, color: "#EA4B71" },
+  { name: "Supabase", icon: SiSupabase, color: "#3FCF8E" },
+  { name: "Postman", icon: SiPostman, color: "#FF6C37" },
+  { name: "Vercel", icon: SiVercel, color: "#ffffff" },
+  { name: "Power BI", icon: BarChart3, color: "#F2C811" },
+  { name: "Canva", icon: Palette, color: "#00C4CC" },
+  { name: "Notion", icon: SiNotion, color: "#ffffff" },
+  { name: "GitHub", icon: SiGithub, color: "#ffffff" },
+];
+
+// Órbita de tecnologías: los anillos giran y los íconos contra-giran para quedar derechos.
+const Ring = ({ items, size, duration, reverse = false }) => (
+  <motion.div
+    className="absolute left-1/2 top-1/2 rounded-full border border-rose/20"
+    style={{ width: size, height: size, marginLeft: -size / 2, marginTop: -size / 2 }}
+    animate={{ rotate: reverse ? -360 : 360 }}
+    transition={{ duration, repeat: Infinity, ease: "linear" }}
+  >
+    {items.map(({ icon: Icon, color }, i) => {
+      const angle = (i / items.length) * Math.PI * 2;
+      return (
+        <motion.span
+          key={i}
+          className="absolute flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-ink-100 shadow-lg shadow-black/50"
+          style={{
+            left: size / 2 + Math.cos(angle) * (size / 2) - 22,
+            top: size / 2 + Math.sin(angle) * (size / 2) - 22,
+          }}
+          animate={{ rotate: reverse ? 360 : -360 }}
+          transition={{ duration, repeat: Infinity, ease: "linear" }}
         >
-          Técnica en Programación (UTN-FRRO). Combino desarrollo, diseño UI/UX y automatización para convertir ideas en
-          productos claros, rápidos y útiles.
-        </SectionHeading>
+          <Icon className="h-5 w-5" style={{ color }} />
+        </motion.span>
+      );
+    })}
+  </motion.div>
+);
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
-          {/* Bio */}
-          <Reveal className="md:col-span-6 lg:col-span-7">
-            <Spotlight className="flex h-full flex-col justify-between gap-10 p-6 sm:p-10">
-              <p className="eyebrow">Hola, soy Muriel Elen Salbador</p>
-              <div className="space-y-6">
-                <p className="text-2xl font-light leading-snug tracking-tight text-bone sm:text-3xl lg:text-[2.4rem] lg:leading-[1.15]">
-                  Desarrolladora front-end especializada en interfaces{" "}
-                  <em className="font-serif italic text-acid">modernas y funcionales</em> con React, Node.js y
-                  TypeScript.
-                </p>
-                <p className="max-w-xl text-base leading-relaxed text-zinc-400">
-                  Tengo experiencia en bases de datos SQL y NoSQL, desarrollo web full-stack, visualización de datos con
-                  Power BI y diseño UI/UX en Figma y Canva. Trabajo directo con clientes —emprendedores y pymes— desde la
-                  idea hasta el deploy.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <a href={CV_URL} target="_blank" rel="noopener noreferrer" className="btn-acid group">
-                  Descargar CV
-                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
-                </a>
-              </div>
-            </Spotlight>
+const Orbit = () => (
+  <div className="relative mx-auto h-[340px] w-[340px] sm:h-[400px] sm:w-[400px]" aria-hidden="true">
+    <div className="absolute inset-[30%] rounded-full bg-rose/30 blur-3xl" />
+    <Ring items={ORBIT_OUTER} size={330} duration={40} reverse />
+    <Ring items={ORBIT_INNER} size={200} duration={26} />
+    <div className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-rose/50 bg-gradient-to-br from-rose-600 to-rose-900 shadow-[0_0_60px_rgba(255,79,147,0.6)]">
+      <span className="font-display text-3xl font-semibold italic text-white">MS</span>
+    </div>
+  </div>
+);
+
+const About = () => (
+  <section id="About" className="relative overflow-hidden py-24 lg:py-32">
+    <div className="container-x">
+      {/* Conoceme */}
+      <div className="grid items-center gap-14 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-4">
+          <Reveal className="label text-rose">Conoceme</Reveal>
+          <Reveal as="h2" delay={0.05} className="mt-3 font-display text-5xl font-medium sm:text-6xl">
+            Sobre <em className="text-rose text-glow">mí</em> ✿
           </Reveal>
-
-          {/* Foto */}
-          <Reveal delay={0.1} className="md:col-span-6 lg:col-span-5">
-            <div className="group relative h-full min-h-[420px] overflow-hidden rounded-3xl border border-white/[0.08]">
-              <img
-                src="/yo.webp"
-                alt="Muriel Salbador"
-                loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-[1.2s] ease-expo group-hover:scale-105 group-hover:grayscale-0"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/10 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6">
-                <div>
-                  <p className="text-xl font-medium">Muriel Salbador</p>
-                  <p className="font-serif text-lg italic text-zinc-300">Front-end Developer</p>
-                </div>
-                <div className="relative h-20 w-20" aria-hidden="true">
-                  <svg viewBox="0 0 100 100" className="animate-spin-slow h-full w-full">
-                    <defs>
-                      <path id="circle" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0" />
-                    </defs>
-                    <text className="fill-bone font-mono text-[10.5px] uppercase tracking-[0.2em]">
-                      <textPath href="#circle">Disponible · Freelance · Remoto ·</textPath>
-                    </text>
-                  </svg>
-                  <span className="absolute inset-0 m-auto h-2.5 w-2.5 rounded-full bg-acid" />
-                </div>
-              </div>
-            </div>
+          <Reveal delay={0.1} className="mt-6 space-y-4 text-sm leading-relaxed text-sand-200 sm:text-base">
+            <p>
+              Soy <strong className="font-medium text-sand">Muriel Elen Salbador</strong>, desarrolladora de software
+              front-end y Técnica en Programación por la UTN-FRRO. Me especializo en interfaces modernas con React,
+              Node.js y TypeScript.
+            </p>
+            <p>
+              Trabajo con bases de datos SQL y NoSQL, visualización de datos con Power BI y diseño UI/UX en Figma y
+              Canva. Me encanta convertir ideas en realidad a través del código y el diseño.
+            </p>
           </Reveal>
+          <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6">
+            {STATS.map((s, i) => (
+              <Reveal key={s.label} delay={0.15 + i * 0.05}>
+                <dd className="font-mono text-3xl font-bold text-rose text-glow">{s.value}</dd>
+                <dt className="mt-1 text-xs text-sand-400">{s.label}</dt>
+              </Reveal>
+            ))}
+          </dl>
+        </div>
 
-          {/* Stats */}
-          {STATS.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.08} className="md:col-span-3 lg:col-span-3">
-              <Spotlight className="flex h-full flex-col justify-between gap-8 p-6 sm:p-8">
-                <span className="font-mono text-xs text-zinc-600">0{i + 1}</span>
-                <div>
-                  <Counter
-                    value={s.value}
-                    suffix={s.suffix}
-                    className="block text-6xl font-light tracking-tighter sm:text-7xl"
-                  />
-                  <p className="mt-2 text-sm text-zinc-400">{s.label}</p>
-                </div>
-              </Spotlight>
+        <Reveal delay={0.1} className="lg:col-span-4">
+          <Orbit />
+        </Reveal>
+
+        <div className="space-y-4 lg:col-span-4">
+          {CARDS.map(({ icon: Icon, title, text }, i) => (
+            <Reveal key={title} delay={0.1 + i * 0.08}>
+              <div className="group rounded-2xl border border-white/[0.08] bg-ink-100/70 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose/40 hover:shadow-[0_10px_40px_-15px_rgba(255,79,147,0.6)]">
+                <h3 className="flex items-center gap-2 font-mono text-sm font-bold text-rose">
+                  <Icon className="h-4 w-4" /> {title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-sand-200">{text}</p>
+              </div>
             </Reveal>
           ))}
-
-          {/* Ubicación */}
-          <Reveal delay={0.24} className="md:col-span-3 lg:col-span-3">
-            <Spotlight className="flex h-full flex-col justify-between gap-8 p-6 sm:p-8">
-              <MapPin className="h-5 w-5 text-acid" />
-              <div>
-                <p className="text-6xl font-light tabular-nums tracking-tighter sm:text-7xl">{time}</p>
-                <p className="mt-2 text-sm text-zinc-400">Rosario, Argentina · GMT-3</p>
-              </div>
-            </Spotlight>
-          </Reveal>
-
-          {/* Cita */}
-          <Reveal className="md:col-span-6 lg:col-span-5">
-            <div className="relative flex h-full flex-col justify-between gap-10 overflow-hidden rounded-3xl bg-acid p-6 text-ink sm:p-10">
-              <span className="font-serif text-8xl leading-[0.5]">“</span>
-              <blockquote className="font-serif text-3xl leading-tight sm:text-4xl">
-                Aprovechar la IA como herramienta profesional, no como reemplazo.
-              </blockquote>
-              <p className="font-mono text-xs uppercase tracking-[0.2em]">— Mi forma de trabajar</p>
-            </div>
-          </Reveal>
-
-          {/* Automatización */}
-          <Reveal delay={0.08} className="md:col-span-3 lg:col-span-4">
-            <Spotlight className="h-full">
-              <AutomationCard />
-            </Spotlight>
-          </Reveal>
-
-          {/* Skills */}
-          <Reveal delay={0.16} className="md:col-span-3 lg:col-span-3">
-            <Spotlight className="flex h-full flex-col gap-6 p-6 sm:p-8">
-              <p className="eyebrow">Habilidades</p>
-              {SKILL_GROUPS.map(({ level, skills }, i) => (
-                <div key={level}>
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="text-sm font-medium">{level}</p>
-                    <span className="flex gap-1" aria-hidden="true">
-                      {[0, 1, 2].map((b) => (
-                        <span
-                          key={b}
-                          className={`h-1 w-4 rounded-full ${b < SKILL_GROUPS.length - i ? "bg-acid" : "bg-white/10"}`}
-                        />
-                      ))}
-                    </span>
-                  </div>
-                  <p className="text-sm leading-relaxed text-zinc-400">{skills.join(" · ")}</p>
-                </div>
-              ))}
-            </Spotlight>
-          </Reveal>
         </div>
       </div>
-    </section>
-  );
-};
+
+      {/* Proceso + herramientas (grilla editorial) */}
+      <div className="mt-24 grid border border-white/[0.08] lg:mt-32 lg:grid-cols-2">
+        <div className="relative overflow-hidden border-b border-white/[0.08] p-6 sm:p-8 lg:border-b-0 lg:border-r">
+          <SectionTitle>Mi proceso</SectionTitle>
+          <ol className="mt-6">
+            {PROCESS.map((step, i) => (
+              <Reveal as="li" key={step.title} delay={i * 0.06}>
+                <div className="group flex gap-5 border-b border-white/[0.06] py-4 last:border-0">
+                  <span className="font-display text-3xl text-sand-400 transition-colors duration-300 group-hover:text-rose">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-widest transition-transform duration-300 group-hover:translate-x-1">
+                      {step.title}
+                    </p>
+                    <p className="mt-1 text-sm text-sand-400">{step.text}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
+          <Sparkles className="absolute -bottom-6 -right-6 h-32 w-32 text-rose/10" aria-hidden="true" />
+        </div>
+
+        <div className="p-6 sm:p-8">
+          <SectionTitle>Herramientas que uso</SectionTitle>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {TOOLS.map(({ name, icon: Icon, color }, i) => (
+              <Reveal key={name} delay={i * 0.03}>
+                <div className="group flex items-center gap-3 rounded-lg border border-white/[0.06] bg-ink-100/70 p-3 transition-all duration-300 hover:-translate-y-0.5 hover:border-rose/40">
+                  <span
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: `${color}1f` }}
+                  >
+                    <Icon className="h-5 w-5" style={{ color }} />
+                  </span>
+                  <span className="text-xs font-medium uppercase tracking-wider">{name}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <p className="label mt-6">& muchas herramientas más ✦</p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 export default memo(About);
