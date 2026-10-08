@@ -117,7 +117,7 @@ const About = () => (
           <Reveal delay={0.1} className="mt-6 space-y-4 text-sm leading-relaxed text-sand-200 sm:text-base">
             <p>
               Soy <strong className="font-medium text-sand">Muriel Elen Salbador</strong>, desarrolladora de software
-              front-end y Técnica en Programación por la UTN-FRRO. Me especializo en interfaces modernas con React,
+              front-end y Técnica en Programación por la Universidad Tecnológica Nacional (UTN Rosario). Me especializo en interfaces modernas con React,
               Node.js y TypeScript.
             </p>
             <p>

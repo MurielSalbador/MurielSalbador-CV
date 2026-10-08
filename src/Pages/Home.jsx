@@ -129,7 +129,7 @@ const Hero = () => {
       <div className="container-x relative flex min-h-[100svh] flex-col pb-8 pt-24 sm:pt-28">
         {/* Meta superior */}
         <motion.div {...fadeUp(0.1)} className="label relative z-30 flex justify-between gap-4">
-          <span>Técnica en Programación · UTN</span>
+          <span>Técnica en Programación · UTN Rosario</span>
           <span>Portfolio · {new Date().getFullYear()}</span>
         </motion.div>
 
@@ -178,8 +178,9 @@ const Hero = () => {
             Diseño y desarrollo experiencias web que <em className="font-display normal-case italic text-rose">conectan</em>
           </motion.p>
           <motion.p {...fadeUp(0.7)} className="max-w-md text-sm leading-relaxed text-sand-200 sm:text-base">
-            Técnica en Programación (UTN-FRRO). Creo sitios y aplicaciones full-stack con React, Node.js y bases de
-            datos, y automatizo procesos con IA — del diseño en Figma al deploy.
+            Soy Técnica en Programación, recibida en la Universidad Tecnológica Nacional (UTN Rosario). Diseño y
+            desarrollo sitios y aplicaciones web completas, desde el diseño en Figma hasta su publicación, con React,
+            Node.js y bases de datos. También automatizo procesos con inteligencia artificial.
           </motion.p>
           <motion.div {...fadeUp(0.8)} className="flex flex-wrap items-center gap-3">
             <button type="button" onClick={() => scrollToTarget("#Proyectos")} className="btn-rose group">

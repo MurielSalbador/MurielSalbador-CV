@@ -171,7 +171,7 @@ export const CERTIFICATES = [
     id: 1,
     img: "",
     title: "Tecnicatura Universitaria en Programación",
-    issuer: "UTN – FRRO",
+    issuer: "Universidad Tecnológica Nacional · Rosario",
     year: "2024 – 2025",
     detail: "Promedio 8.0",
     tags: ["Programación", "Bases de datos", "Sistemas"],
