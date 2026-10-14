@@ -1,68 +1,73 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { Compass, Sparkles, Target, Bot, Palette } from "lucide-react";
+import { Compass, Sparkles, Target, Bot, Database, FileSpreadsheet } from "lucide-react";
 import {
-  SiReact, SiNodedotjs, SiMongodb, SiExpress, SiTypescript, SiFigma, SiN8N, SiSupabase,
-  SiGithub, SiPostman, SiVercel, SiNotion,
+  SiReact, SiNodedotjs, SiMongodb, SiExpress, SiTypescript, SiFigma, SiN8N, SiPython, SiFlask,
+  SiGithub, SiDocker, SiLinux, SiOdoo, SiPandas, SiChartdotjs, SiPostgresql, SiDify, SiClaude,
 } from "react-icons/si";
-import { BarChart3 } from "lucide-react";
-import { PROJECTS, CERTIFICATES, YEARS_EXPERIENCE, PROCESS } from "../data/projects";
+import { YEARS_EXPERIENCE, PROCESS } from "../data/projects";
 import { Reveal } from "../components/ui/Reveal";
 import SectionTitle from "../components/ui/SectionTitle";
 
 const STATS = [
-  { value: `${PROJECTS.length}+`, label: "Proyectos realizados" },
+  { value: "15+", label: "Proyectos para PyMEs" },
   { value: `${YEARS_EXPERIENCE}+`, label: "Años de experiencia" },
-  { value: CERTIFICATES.length, label: "Formaciones" },
-  { value: "24/7", label: "Aprendiendo" },
+  { value: "28", label: "Estaciones con trazabilidad" },
+  { value: "70%", label: "Menos tareas manuales" },
 ];
 
 const CARDS = [
   {
     icon: Compass,
-    title: "Mi filosofía",
-    text: "Combinar diseño cuidado con tecnologías modernas para crear experiencias únicas, rápidas y fáciles de usar.",
+    title: "Mi enfoque",
+    text: "Mejora continua y análisis de causa raíz: entender el problema real antes de escribir código, y medir el resultado después.",
   },
   {
     icon: Target,
-    title: "Mi misión",
-    text: "Transformar ideas complejas en interfaces claras, responsivas y pensadas para las personas que las usan.",
+    title: "Área productiva",
+    text: "Tableros conectados a la base de datos de producción, trazabilidad por escaneo e indicadores en tiempo real.",
   },
   {
     icon: Bot,
     title: "IA como herramienta",
-    text: "“Aprovechar la IA como herramienta profesional, no como reemplazo.” Automatizo con n8n y agentes.",
+    text: "“Aprovechar la IA como herramienta profesional, no como reemplazo.” Bots y agentes con n8n, Dify y LLMs.",
   },
 ];
 
 const ORBIT_INNER = [
+  { icon: SiPython, color: "#4B8BBE" },
   { icon: SiReact, color: "#61DAFB" },
   { icon: SiNodedotjs, color: "#5FA04E" },
-  { icon: SiMongodb, color: "#47A248" },
-  { icon: SiExpress, color: "#e5e5e5" },
+  { icon: SiFlask, color: "#e5e5e5" },
 ];
 const ORBIT_OUTER = [
   { icon: SiTypescript, color: "#3178C6" },
-  { icon: SiFigma, color: "#F24E1E" },
+  { icon: SiPostgresql, color: "#6c9bd2" },
   { icon: SiN8N, color: "#EA4B71" },
-  { icon: SiSupabase, color: "#3FCF8E" },
-  { icon: SiGithub, color: "#ffffff" },
-  { icon: BarChart3, color: "#F2C811" },
+  { icon: SiMongodb, color: "#47A248" },
+  { icon: SiDocker, color: "#2496ED" },
+  { icon: SiOdoo, color: "#A24689" },
 ];
 
 const TOOLS = [
-  { name: "Figma", icon: SiFigma, color: "#F24E1E" },
+  { name: "Python", icon: SiPython, color: "#4B8BBE" },
+  { name: "Flask", icon: SiFlask, color: "#e5e5e5" },
+  { name: "pandas", icon: SiPandas, color: "#8a7fd6" },
   { name: "React", icon: SiReact, color: "#61DAFB" },
-  { name: "Node.js", icon: SiNodedotjs, color: "#5FA04E" },
-  { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+  { name: "Node / Express", icon: SiExpress, color: "#e5e5e5" },
+  { name: "SQL Server", icon: Database, color: "#e0524b" },
+  { name: "PostgreSQL", icon: SiPostgresql, color: "#6c9bd2" },
+  { name: "Chart.js", icon: SiChartdotjs, color: "#FF6384" },
+  { name: "Odoo", icon: SiOdoo, color: "#c46fb0" },
   { name: "n8n", icon: SiN8N, color: "#EA4B71" },
-  { name: "Supabase", icon: SiSupabase, color: "#3FCF8E" },
-  { name: "Postman", icon: SiPostman, color: "#FF6C37" },
-  { name: "Vercel", icon: SiVercel, color: "#ffffff" },
-  { name: "Power BI", icon: BarChart3, color: "#F2C811" },
-  { name: "Canva", icon: Palette, color: "#00C4CC" },
-  { name: "Notion", icon: SiNotion, color: "#ffffff" },
-  { name: "GitHub", icon: SiGithub, color: "#ffffff" },
+  { name: "Dify", icon: SiDify, color: "#5b8cff" },
+  { name: "LLMs", icon: SiClaude, color: "#D97757" },
+  { name: "Docker", icon: SiDocker, color: "#2496ED" },
+  { name: "Linux", icon: SiLinux, color: "#FCC624" },
+  { name: "Git / GitHub", icon: SiGithub, color: "#ffffff" },
+  { name: "Excel", icon: FileSpreadsheet, color: "#21A366" },
+  { name: "Figma", icon: SiFigma, color: "#F24E1E" },
+  { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
 ];
 
 // Órbita de tecnologías: los anillos giran y los íconos contra-giran para quedar derechos.
@@ -116,13 +121,13 @@ const About = () => (
           </Reveal>
           <Reveal delay={0.1} className="mt-6 space-y-4 text-sm leading-relaxed text-sand-200 sm:text-base">
             <p>
-              Soy <strong className="font-medium text-sand">Muriel Elen Salbador</strong>, desarrolladora de software
-              front-end y Técnica en Programación por la Universidad Tecnológica Nacional (UTN Rosario). Me especializo en interfaces modernas con React,
-              Node.js y TypeScript.
+              Soy <strong className="font-medium text-sand">Muriel Elen Salbador</strong>, desarrolladora full-stack,
+              Técnica en Programación (UTN Rosario) y estudiante de la Tecnicatura en Inteligencia Artificial (UNR).
+              Hace más de 4 años desarrollo webs y sistemas a medida para PyMEs.
             </p>
             <p>
-              Trabajo con bases de datos SQL y NoSQL, visualización de datos con Power BI y diseño UI/UX en Figma y
-              Canva. Me encanta convertir ideas en realidad a través del código y el diseño.
+              Hoy me enfoco en el área productiva: tableros conectados a la base de datos de producción, trazabilidad
+              por escaneo e indicadores en tiempo real, siempre con mirada de mejora continua y análisis de causa raíz.
             </p>
           </Reveal>
           <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-6">

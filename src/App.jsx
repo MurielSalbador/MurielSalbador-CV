@@ -8,7 +8,7 @@ import About from "./Pages/About";
 import Journey from "./Pages/Journey";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import { scrollToTarget, setLenis } from "./lib/scroll";
+import { resetScroll, scrollToTarget, setLenis } from "./lib/scroll";
 
 const ProjectDetails = lazy(() => import("./components/ProjectDetail"));
 const NotFoundPage = lazy(() => import("./Pages/404"));
@@ -25,7 +25,7 @@ const LandingPage = () => {
     handledKey.current = location.key;
     const target = location.state?.scrollTo;
     if (target) requestAnimationFrame(() => scrollToTarget(target, { immediate: true }));
-    else window.scrollTo(0, 0);
+    else resetScroll();
   }, [location.key, location.state]);
 
   return (

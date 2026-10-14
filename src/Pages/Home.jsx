@@ -4,7 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowDownRight, FileText, FolderOpen, Globe, Linkedin, Github, Instagram } from "lucide-react";
 import {
   SiReact, SiJavascript, SiTypescript, SiNodedotjs, SiExpress, SiMongodb, SiTailwindcss,
-  SiVite, SiNextdotjs, SiPostgresql, SiSupabase, SiN8N, SiPython, SiFigma, SiMysql, SiGithub,
+  SiVite, SiPostgresql, SiN8N, SiPython, SiFigma, SiMysql, SiGithub, SiFlask, SiDocker, SiOdoo,
 } from "react-icons/si";
 import { PROJECTS } from "../data/projects";
 import { CV_URL, GITHUB, INSTAGRAM, LINKEDIN } from "../lib/nav";
@@ -14,7 +14,7 @@ import Marquee from "../components/ui/Marquee";
 import Dock from "../components/ui/Dock";
 import { EASE } from "../components/ui/motion";
 
-const ROLES = ["Desarrolladora Front-end", "Full-Stack MERN", "Automatización con IA", "Diseño UI/UX"];
+const ROLES = ["Desarrolladora Full-Stack", "Sistemas para producción", "Python & JavaScript", "Automatización con IA"];
 
 // Posiciones de las miniaturas que flotan alrededor de la foto (inspo: collage flotante).
 // Alrededor de la foto, que está a la derecha.
@@ -28,20 +28,21 @@ const FLOAT_SPOTS = [
 ];
 
 const TECH = [
+  { name: "Python", icon: SiPython, color: "#4B8BBE" },
+  { name: "Flask", icon: SiFlask, color: "#e5e5e5" },
   { name: "React", icon: SiReact, color: "#61DAFB" },
   { name: "Node.js", icon: SiNodedotjs, color: "#5FA04E" },
   { name: "Express", icon: SiExpress, color: "#e5e5e5" },
   { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
   { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
   { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
-  { name: "Next.js", icon: SiNextdotjs, color: "#ffffff" },
   { name: "Tailwind", icon: SiTailwindcss, color: "#38BDF8" },
   { name: "Vite", icon: SiVite, color: "#a78bfa" },
   { name: "PostgreSQL", icon: SiPostgresql, color: "#6c9bd2" },
   { name: "MySQL", icon: SiMysql, color: "#4479A1" },
-  { name: "Supabase", icon: SiSupabase, color: "#3FCF8E" },
+  { name: "Odoo", icon: SiOdoo, color: "#c46fb0" },
+  { name: "Docker", icon: SiDocker, color: "#2496ED" },
   { name: "n8n", icon: SiN8N, color: "#EA4B71" },
-  { name: "Python", icon: SiPython, color: "#4B8BBE" },
   { name: "Figma", icon: SiFigma, color: "#F24E1E" },
   { name: "GitHub", icon: SiGithub, color: "#ffffff" },
 ];
@@ -178,9 +179,9 @@ const Hero = () => {
             Diseño y desarrollo experiencias web que <em className="font-display normal-case italic text-rose">conectan</em>
           </motion.p>
           <motion.p {...fadeUp(0.7)} className="max-w-md text-sm leading-relaxed text-sand-200 sm:text-base">
-            Soy Técnica en Programación, recibida en la Universidad Tecnológica Nacional (UTN Rosario). Diseño y
-            desarrollo sitios y aplicaciones web completas, desde el diseño en Figma hasta su publicación, con React,
-            Node.js y bases de datos. También automatizo procesos con inteligencia artificial.
+            Técnica en Programación (UTN Rosario) y estudiante de Inteligencia Artificial (UNR). Hace más de 4 años
+            desarrollo webs y sistemas a medida para PyMEs; hoy me enfoco en el área productiva, con tableros,
+            trazabilidad e indicadores en tiempo real.
           </motion.p>
           <motion.div {...fadeUp(0.8)} className="flex flex-wrap items-center gap-3">
             <button type="button" onClick={() => scrollToTarget("#Proyectos")} className="btn-rose group">
@@ -197,7 +198,7 @@ const Hero = () => {
               Disponible para proyectos ✦
             </span>
             <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-sand-400">
-              <Globe className="h-4 w-4 animate-spin-slow" /> Rosario · Remoto
+              <Globe className="h-4 w-4 animate-spin-slow" /> Álvarez, Santa Fe · Remoto / Híbrido
             </span>
           </motion.div>
         </div>

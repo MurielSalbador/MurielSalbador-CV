@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
-import { Calendar, Eye, GraduationCap, X } from "lucide-react";
-import { CERTIFICATES, EXPERIENCE } from "../data/projects";
+import { Calendar, Eye, GraduationCap, Languages, X } from "lucide-react";
+import { CERTIFICATES, EDUCATION, EXPERIENCE, LANGUAGES } from "../data/projects";
 import { Reveal } from "../components/ui/Reveal";
 import SectionTitle from "../components/ui/SectionTitle";
 import { getLenis } from "../lib/scroll";
@@ -93,6 +93,23 @@ const Timeline = () => {
                     </li>
                   ))}
                 </ul>
+                {item.projects && (
+                  <div className="mt-5 border-t border-white/[0.06] pt-4">
+                    <p className="label mb-3 text-rose">Sistemas desarrollados</p>
+                    <ul className="grid gap-2 sm:grid-cols-2">
+                      {item.projects.map((proj) => (
+                        <li
+                          key={proj.name}
+                          className="rounded-lg border border-white/[0.06] bg-ink/60 p-3 transition-colors hover:border-rose/30"
+                        >
+                          <p className="text-sm font-semibold text-sand">{proj.name}</p>
+                          <p className="mt-1 text-xs leading-relaxed text-sand-400">{proj.text}</p>
+                          <p className="mt-2 font-mono text-[10px] text-rose-300">{proj.stack.join(" · ")}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </Reveal>
           );
@@ -105,8 +122,6 @@ const Timeline = () => {
 const Journey = () => {
   const [selected, setSelected] = useState(null);
   const close = useCallback(() => setSelected(null), []);
-  const certificates = CERTIFICATES.filter((c) => c.img);
-  const education = CERTIFICATES.filter((c) => !c.img);
 
   return (
     <section id="Trayectoria" className="relative border-t border-white/[0.08] py-24 lg:py-32">
@@ -131,7 +146,7 @@ const Journey = () => {
           <div>
             <SectionTitle className="mb-8">Educación</SectionTitle>
             <div className="space-y-4">
-              {education.map((edu, i) => (
+              {EDUCATION.map((edu, i) => (
                 <Reveal key={edu.id} delay={i * 0.08}>
                   <div className="group flex gap-4 rounded-xl border border-white/[0.08] bg-ink-100/70 p-5 transition-all duration-300 hover:translate-x-1 hover:border-rose/40">
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-rose/10 text-rose transition-transform group-hover:rotate-6">
@@ -151,49 +166,73 @@ const Journey = () => {
                 </Reveal>
               ))}
             </div>
+
+            <SectionTitle className="mb-6 mt-12">Idiomas</SectionTitle>
+            <Reveal className="grid grid-cols-2 gap-4">
+              {LANGUAGES.map((lang) => (
+                <div key={lang.name} className="flex items-center gap-3 rounded-xl border border-white/[0.08] bg-ink-100/70 p-4">
+                  <Languages className="h-5 w-5 text-rose" />
+                  <div>
+                    <p className="font-semibold text-sand">{lang.name}</p>
+                    <p className="font-mono text-xs text-sand-400">{lang.level}</p>
+                  </div>
+                </div>
+              ))}
+            </Reveal>
           </div>
         </div>
 
         {/* Certificados */}
         <div className="mt-24">
           <SectionTitle className="mb-8">Certificados</SectionTitle>
-          <div className="grid gap-5 md:grid-cols-2">
-            {certificates.map((cert, i) => (
-              <Reveal key={cert.id} delay={i * 0.1}>
-                <button
-                  type="button"
-                  onClick={() => setSelected(cert)}
-                  className="group grid h-full w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-100/70 text-left transition-all duration-500 hover:-translate-y-1 hover:border-rose/40 hover:shadow-[0_20px_50px_-20px_rgba(255,79,147,0.6)] sm:grid-cols-5"
-                >
-                  <div className="relative overflow-hidden sm:col-span-2">
-                    <img
-                      src={cert.img}
-                      alt=""
-                      loading="lazy"
-                      className="h-44 w-full object-cover transition-transform duration-700 group-hover:scale-110 sm:h-full"
-                    />
-                    <span className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent sm:bg-gradient-to-r" />
-                  </div>
-                  <div className="flex flex-col gap-3 p-5 sm:col-span-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <h4 className="font-semibold leading-snug text-sand">{cert.title}</h4>
-                      <span className="font-mono text-lg font-bold text-rose text-glow">{cert.year}</span>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {CERTIFICATES.map((cert, i) => {
+              const Icon = cert.icon;
+              const Card = cert.img ? "button" : "div";
+              return (
+                <Reveal key={cert.id} delay={i * 0.08}>
+                  <Card
+                    {...(cert.img ? { type: "button", onClick: () => setSelected(cert) } : {})}
+                    className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-ink-100/70 text-left transition-all duration-500 hover:-translate-y-1 hover:border-rose/40 hover:shadow-[0_20px_50px_-20px_rgba(255,79,147,0.6)]"
+                  >
+                    <div className="relative h-40 overflow-hidden">
+                      {cert.img ? (
+                        <img
+                          src={cert.img}
+                          alt=""
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center bg-gradient-to-br from-rose-900 via-ink-200 to-ink">
+                          <Icon className="h-12 w-12 text-rose/70 transition-transform duration-500 group-hover:scale-110" />
+                        </div>
+                      )}
+                      <span className="absolute inset-0 bg-gradient-to-t from-ink-100 to-transparent" />
                     </div>
-                    <p className="font-mono text-xs text-sand-400">{cert.issuer}</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {cert.tags.map((t) => (
-                        <span key={t} className="tag">
-                          {t}
+                    <div className="flex flex-1 flex-col gap-3 p-5">
+                      <div className="flex items-start justify-between gap-3">
+                        <h4 className="font-semibold leading-snug text-sand">{cert.title}</h4>
+                        <span className="font-mono text-lg font-bold text-rose text-glow">{cert.year}</span>
+                      </div>
+                      <p className="font-mono text-xs text-sand-400">{cert.issuer}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {cert.tags.map((t) => (
+                          <span key={t} className="tag">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                      {cert.img && (
+                        <span className="mt-auto flex items-center gap-1.5 font-mono text-xs text-rose-300 group-hover:text-rose">
+                          <Eye className="h-3.5 w-3.5" /> Ver certificado
                         </span>
-                      ))}
+                      )}
                     </div>
-                    <span className="mt-auto flex items-center gap-1.5 font-mono text-xs text-rose-300 group-hover:text-rose">
-                      <Eye className="h-3.5 w-3.5" /> Ver certificado
-                    </span>
-                  </div>
-                </button>
-              </Reveal>
-            ))}
+                  </Card>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -7,6 +7,13 @@ export const setLenis = (lenis) => {
 
 export const getLenis = () => lenisInstance;
 
+// Vuelve arriba de todo sin animación (Lenis guarda su propia posición,
+// así que hay que resetearlo además del scroll nativo).
+export const resetScroll = () => {
+  lenisInstance?.scrollTo(0, { immediate: true, force: true });
+  window.scrollTo(0, 0);
+};
+
 export const scrollToTarget = (target, options = {}) => {
   if (lenisInstance) {
     lenisInstance.scrollTo(target, { offset: -80, ...options });

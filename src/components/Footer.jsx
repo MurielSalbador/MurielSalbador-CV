@@ -1,8 +1,9 @@
-import { ArrowUpRight, Github, Instagram, Linkedin, MapPin } from "lucide-react";
-import { GITHUB, INSTAGRAM, LINKEDIN } from "../lib/nav";
+import { ArrowUpRight, Github, Instagram, Linkedin, Mail, MapPin } from "lucide-react";
+import { EMAIL, GITHUB, INSTAGRAM, LINKEDIN } from "../lib/nav";
 import { Reveal } from "./ui/Reveal";
 
 const CONTACTS = [
+  { label: EMAIL, href: `mailto:${EMAIL}`, icon: Mail },
   { label: "in/muriel-salbador", href: LINKEDIN, icon: Linkedin },
   { label: "@MurielSalbador", href: GITHUB, icon: Github },
   { label: "@muriel_salbador", href: INSTAGRAM, icon: Instagram },
@@ -41,7 +42,7 @@ const Footer = () => (
               <li key={href}>
                 <a
                   href={href}
-                  target="_blank"
+                  target={href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
                   className="group flex items-center gap-3 text-sm text-sand-200 transition-colors hover:text-rose"
                 >
@@ -57,7 +58,7 @@ const Footer = () => (
               <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10">
                 <MapPin className="h-4 w-4" />
               </span>
-              Rosario, Argentina
+              Álvarez, Santa Fe · Remoto / Híbrido
             </li>
           </ul>
         </Reveal>

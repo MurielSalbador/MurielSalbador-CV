@@ -1,4 +1,4 @@
-import { Globe, Code, Briefcase, Award, GraduationCap } from "lucide-react";
+import { Globe, Code, Award, GraduationCap, Factory, Server } from "lucide-react";
 
 export const PROJECTS = [
   {
@@ -152,11 +152,20 @@ export const CERTIFICATES = [
   {
     id: 5,
     img: "/CERTIFICADO.webp",
-    title: "Curso de N8N – Creá tu Agente de Inteligencia Artificial",
-    issuer: "Curso online",
-    year: "2025",
+    title: "N8N: Creá tu Agente de Inteligencia Artificial",
+    issuer: "AcademiaQA",
+    year: "2026",
     tags: ["n8n", "Agentes IA", "Automatización"],
     icon: GraduationCap,
+  },
+  {
+    id: 6,
+    img: "",
+    title: "Data Center",
+    issuer: "Elevify",
+    year: "2026",
+    tags: ["Infraestructura", "Servidores", "Redes"],
+    icon: Server,
   },
   {
     id: 4,
@@ -167,85 +176,106 @@ export const CERTIFICATES = [
     tags: ["Robótica", "Tecnología"],
     icon: Award,
   },
+];
+
+export const EDUCATION = [
   {
-    id: 1,
-    img: "",
+    id: "edu-ia",
+    title: "Tecnicatura en Inteligencia Artificial",
+    issuer: "Universidad Nacional de Rosario (UNR)",
+    year: "2026 – Actualidad",
+    detail: "En curso",
+  },
+  {
+    id: "edu-utn",
     title: "Tecnicatura Universitaria en Programación",
     issuer: "Universidad Tecnológica Nacional · Rosario",
-    year: "2024 – 2025",
-    detail: "Promedio 8.0",
-    tags: ["Programación", "Bases de datos", "Sistemas"],
-    icon: GraduationCap,
+    year: "2024 – 2026",
   },
-  {
-    id: 2,
-    img: "",
-    title: "Tecnicatura Superior en Programación",
-    issuer: "Teclab",
-    year: "2023",
-    tags: ["Programación", "Desarrollo web"],
-    icon: GraduationCap,
-  },
-  {
-    id: 3,
-    img: "",
-    title: "Curso de Desarrollo Web",
-    issuer: "Colegio Verbo Encarnado",
-    year: "2022",
-    tags: ["HTML", "CSS", "JavaScript"],
-    icon: GraduationCap,
-  },
+];
+
+export const LANGUAGES = [
+  { name: "Español", level: "Nativo" },
+  { name: "Inglés", level: "B2" },
 ];
 
 export const EXPERIENCE = [
   {
-    title: "Web Designer",
-    company: "Freelance",
-    period: "2022 - Presente",
-    icon: Globe,
+    title: "Sistemas para Producción y Soporte IT",
+    company: "Amoblamientos Reno · Álvarez, Santa Fe",
+    period: "Ene 2026 – Actualidad",
+    icon: Factory,
     tasks: [
-      "Diseño de sitios web personalizados y responsivos.",
-      "Trabajo directo con usuarios para identificar necesidades.",
-      "Enfoque en experiencia de usuario (UX) y comunicación visual.",
+      "Desarrollo de tableros informativos y estadísticos conectados a la base productiva, validados con cada área.",
+      "Consultas SQL para alimentar los tableros y resolución de errores de Odoo.",
+      "Soporte técnico: reparación de PC, configuración de etiquetas de las máquinas y planillas Excel.",
+      "Bots con IA y automatizaciones con n8n para la atención de consultas.",
+    ],
+    projects: [
+      {
+        name: "Sistema de Control de planta",
+        text: "Escaneo por código de barras de cada pieza en 28 estaciones de toda la planta. Trazabilidad digital, avance y deuda de cada OP y etiquetas de despacho.",
+        stack: ["Python", "Flask", "SQL Server"],
+      },
+      {
+        name: "Vista General",
+        text: "Análisis general de producción y Odoo: deuda, remisión, ventas y CRM.",
+        stack: ["Flask", "pandas"],
+      },
+      {
+        name: "Producción por hora",
+        text: "Rendimiento por turno y máquina, paradas y cola de trabajo en vivo.",
+        stack: ["Flask", "SQL Server"],
+      },
+      {
+        name: "Reprocesos",
+        text: "Porcentaje de reproceso por causa, máquina y material, con Pareto.",
+        stack: ["Flask", "Chart.js"],
+      },
+      {
+        name: "Tablero Comercial",
+        text: "CRM de Odoo, objetivos vs. realizado y ranking de franquicias.",
+        stack: ["Flask", "Odoo"],
+      },
     ],
   },
   {
-    title: "Desarrolladora Freelance",
-    company: "Múltiples Proyectos",
-    period: "2023 - Presente",
+    title: "Desarrolladora Full-Stack",
+    company: "Neura Sistemas · Software a medida para PyMEs · Remoto",
+    period: "2026 – Actualidad",
     icon: Code,
     tasks: [
-      "Creación de sitios web para emprendedores y pymes.",
-      "SEO básico, configuración de dominios y hosting.",
-      "Gestión completa del ciclo de vida de cada proyecto.",
+      "Más de 15 proyectos para PyMEs: webs, e-commerce, CRM y chatbots, con MercadoPago, Stripe y WhatsApp.",
+      "Automatización con n8n y agentes de IA: hasta un 70% menos de tiempo en tareas manuales.",
     ],
   },
   {
-    title: "Escuela de Enfermería M. E. Araya de Colombres",
-    company: "Soporte Administrativo",
-    period: "2023",
-    icon: Briefcase,
+    title: "Desarrolladora Full-Stack Freelance",
+    company: "Webs y tiendas online a medida · Remoto",
+    period: "2022 – Actualidad",
+    icon: Globe,
     tasks: [
-      "Organización de documentación física y digital.",
-      "Atención al público y soporte administrativo.",
-      "Planificación de eventos y elaboración de informes.",
+      "Sitios, tiendas online y sistemas a medida para emprendedores y PyMEs, de punta a punta.",
     ],
   },
 ];
 
 export const SKILL_GROUPS = [
+  { level: "Lenguajes", skills: ["Python", "JavaScript", "TypeScript", "SQL"] },
   {
-    level: "Avanzado",
-    skills: ["React.js", "JavaScript", "HTML & CSS", "Comunicación y atención al usuario"],
+    level: "Frameworks y librerías",
+    skills: ["Flask", "React.js", "Node.js", "Express", "pandas", "Chart.js", "HTML5", "CSS3"],
+  },
+  { level: "Bases de datos", skills: ["SQL Server", "PostgreSQL", "MySQL", "MongoDB"] },
+  {
+    level: "Automatización e integraciones",
+    skills: ["n8n", "Dify", "LLMs (OpenAI, Claude, Gemini)", "Odoo (XML-RPC)", "APIs REST"],
   },
   {
-    level: "Intermedio",
-    skills: ["TypeScript", "Node.js / Express", "MongoDB / SQL", "UI/UX con Figma"],
+    level: "Procesos industriales",
+    skills: ["Trazabilidad", "Indicadores (KPI)", "Mejora continua", "Causa raíz", "Costos de producción"],
   },
-  {
-    level: "En crecimiento",
-    skills: ["n8n y automatizaciones con IA", "Python", "Power BI"],
-  },
+  { level: "Herramientas y DevOps", skills: ["Git", "Docker", "Linux", "Windows Server", "Excel"] },
 ];
 
 export const YEARS_EXPERIENCE = 4;

@@ -6,6 +6,7 @@ import { PROJECTS } from "../data/projects";
 import { Reveal } from "./ui/Reveal";
 import SectionTitle from "./ui/SectionTitle";
 import { EASE } from "./ui/motion";
+import { resetScroll } from "../lib/scroll";
 
 const pad = (n) => String(n).padStart(2, "0");
 
@@ -49,7 +50,7 @@ const ProjectDetails = () => {
   const project = index >= 0 ? PROJECTS[index] : null;
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    resetScroll();
   }, [id]);
 
   if (!project) {
