@@ -11,8 +11,8 @@ Este proyecto está construido utilizando tecnologías web modernas:
 - ⚛️ **ReactJS** — Librería de frontend
 - 🎨 **Tailwind CSS** — Framework CSS basado en utilidades
 - 🛠️ **Supabase** — Backend para portfolio, certificados y comentarios
-- ✨ **AOS (Animate On Scroll)** — Librería de animaciones al hacer scroll
-- 🎭 **Framer Motion** — Animaciones avanzadas en React
+- 🎭 **Framer Motion** — Animaciones, reveals de texto y scroll (proyectos apilados)
+- 🌀 **Lenis** — Scroll suave
 - 💡 **Lucide** — Biblioteca de íconos SVG
 - 📦 **Material UI** — Componentes UI para React
 - 💬 **SweetAlert2** — Cuadros de diálogo personalizados
